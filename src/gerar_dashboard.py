@@ -170,6 +170,16 @@ def gerar_raw(df: pd.DataFrame) -> dict:
     hoje = datetime.today()
     stats = {}
 
+    # Carregar sinais do modelo (se disponíveis)
+    sinais_modelo = {}
+    sinais_path = CACHE_DIR / "sinais_modelo.json"
+    if sinais_path.exists():
+        try:
+            sinais_modelo = json.loads(sinais_path.read_text())
+            log.info(f"Sinais do modelo: {len(sinais_modelo)} produtos")
+        except Exception as e:
+            log.warning(f"sinais_modelo.json: {e}")
+
     for col, cfg in PRODUTOS.items():
         if col not in df.columns:
             continue
@@ -182,6 +192,16 @@ def gerar_raw(df: pd.DataFrame) -> dict:
                 .ffill().tail(26).reset_index())
 
         sc = _score(s)
+
+        # Usar sinal do modelo se disponível; fallback para técnico
+        sinal_m = sinais_modelo.get(col, {})
+        sinal   = sinal_m.get("sinal", _sinal(sc))
+        probs   = sinal_m.get("probs", _probs(sc))
+        metodo  = sinal_m.get("metodo", "técnico")
+        acc_bt  = sinal_m.get("acc", None)
+        prec_a  = sinal_m.get("prec_alta", None)
+        prec_b  = sinal_m.get("prec_baixa", None)
+
         try:
             dr = pd.Timestamp(df["data"].iloc[s.last_valid_index()
                 if isinstance(s.last_valid_index(), int)
@@ -199,8 +219,10 @@ def gerar_raw(df: pd.DataFrame) -> dict:
             "mm20":round(float(s.rolling(20).mean().iloc[-1]),2) if len(s)>=20 else round(float(s.iloc[-1]),2),
             "mm60":round(float(s.rolling(60).mean().iloc[-1]),2) if len(s)>=60 else round(float(s.iloc[-1]),2),
             "vol30":round(float(s.pct_change().rolling(30).std().iloc[-1]*np.sqrt(252)*100),1) if len(s)>=30 else 0.0,
-            "score":sc,"sinal":_sinal(sc),"probs":_probs(sc),
-            "acc":None,"f1":None,
+            "score":sc,"sinal":sinal,"probs":probs,
+            "metodo":metodo,
+            "acc":acc_bt,"f1":None,
+            "prec_alta":prec_a,"prec_baixa":prec_b,
             "sazon":SAZON.get(col,[0]*12),
             "min":round(float(s.tail(252).min()),2),"max":round(float(s.tail(252).max()),2),
             "hist":[round(float(x),2) for x in df_w[col].tolist()],
