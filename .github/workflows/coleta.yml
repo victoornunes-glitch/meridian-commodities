@@ -1,0 +1,81 @@
+name: Coleta de Dados e Atualização do Dashboard
+
+on:
+  schedule:
+    # Toda segunda e quarta às 10h30 UTC = 07h30 BRT
+    - cron: "30 10 * * 1"
+    - cron: "30 10 * * 3"
+  workflow_dispatch:   # permite rodar manualmente pelo GitHub
+
+permissions:
+  contents: write      # necessário para o commit automático
+
+jobs:
+  coletar-e-publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # 1 — Checkout do repositório
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # histórico completo (para o cache de dados)
+
+      # 2 — Configurar Python
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # 3 — Instalar dependências
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      # 4 — Restaurar cache de dados históricos (parquet)
+      - name: Restaurar cache de dados
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: cache-dados-${{ runner.os }}-${{ github.run_number }}
+          restore-keys: |
+            cache-dados-${{ runner.os }}-
+
+      # 5 — Executar pipeline de coleta
+      - name: Executar pipeline
+        run: python src/pipeline.py
+        env:
+          PYTHONPATH: src
+
+      # 6 — Gerar dashboard (atualiza docs/data.json e docs/index.html)
+      - name: Gerar dashboard
+        run: python src/gerar_dashboard.py
+        env:
+          PYTHONPATH: src
+
+      # 7 — Verificar se houve mudanças nos docs
+      - name: Verificar mudanças
+        id: check_changes
+        run: |
+          git diff --quiet docs/ && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      # 8 — Commit e push automático
+      - name: Commit e push
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "Meridian Bot"
+          git config user.email "bot@meridian-commodities"
+          git add docs/
+          git add data/cache/ || true
+          git commit -m "📊 Atualização automática $(date +'%d/%m/%Y %H:%M') BRT"
+          git push
+
+      # 9 — Log de execução
+      - name: Resumo da execução
+        if: always()
+        run: |
+          echo "=== Status da Coleta ==="
+          cat data/cache/ultimo_status.json 2>/dev/null || echo "Sem status gerado"
+          echo "=== Arquivos em docs/ ==="
+          ls -lh docs/
