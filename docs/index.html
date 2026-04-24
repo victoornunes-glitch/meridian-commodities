@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden;max-width:100%}
 :root{
   --bg:#f0ece4;--bg2:#e8e3da;--bg3:#ddd8ce;--panel:#fff;
   --ink:#1a1a1a;--ink2:#3d3d3d;--ink3:#6b6b6b;--ink4:#999;
@@ -18,7 +19,7 @@
   --blue:#1d5fa8;--blue-bg:#eef4fd;--blue-mid:#b8d0f0;
   --radius:8px;--shadow:0 2px 12px rgba(0,0,0,.07);
 }
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-text-size-adjust:100%}
 
 /* ── HEADER ── */
 header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between}
@@ -34,7 +35,7 @@ header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items
 .ptax-chip span{color:#e8c96e;font-weight:700}
 
 /* ── LEGEND ── */
-.legend-bar{background:var(--ink2);padding:8px 32px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.legend-bar{background:var(--ink2);padding:8px 32px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;-webkit-overflow-scrolling:touch}
 .leg-item{display:flex;align-items:center;gap:7px;font-size:11px;color:#ccc;font-weight:500}
 .leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 .leg-dot.red{background:var(--red)}.leg-dot.amber{background:#d97706}.leg-dot.green{background:var(--green)}
@@ -44,7 +45,7 @@ header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items
 .btn-metodologia:hover{background:rgba(255,255,255,.14);color:white}
 
 /* ── MAIN ── */
-.main{padding:24px 32px 32px;display:grid;gap:20px}
+.main{padding:24px 32px 32px;display:grid;gap:20px;overflow:hidden}
 
 /* ── PRODUCT GRID ── */
 .product-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
@@ -84,10 +85,10 @@ header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items
 .news-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;width:16px;text-align:right;color:var(--ink)}
 
 /* ── DETAIL PANEL ── */
-.detail-panel{background:var(--panel);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;display:none}
+.detail-panel{background:var(--panel);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;display:none;max-width:100%;box-sizing:border-box}
 .detail-panel.open{display:grid;grid-template-columns:1fr 340px}
 .detail-left{padding:24px 28px;border-right:1px solid var(--border)}
-.detail-right{padding:24px;overflow-y:auto}
+.detail-right{padding:24px;overflow-y:auto;min-width:0;max-width:100%}
 .detail-product-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
 .dph-emoji{font-size:32px}
 .dph-name{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:var(--ink);line-height:1}
@@ -112,7 +113,7 @@ header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items
 .chart-label{font-size:10px;color:var(--ink3);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;margin-bottom:6px}
 
 /* Right panel */
-.action-box{border-radius:6px;padding:16px;margin-bottom:16px;border:1px solid}
+.action-box{border-radius:6px;padding:16px;margin-bottom:16px;border:1px solid;overflow:hidden;word-break:break-word}
 .action-box.ANTECIPAR{background:var(--red-bg);border-color:var(--red-mid)}
 .action-box.NORMAL{background:var(--amber-bg);border-color:var(--amber-mid)}
 .action-box.AGUARDAR{background:var(--green-bg);border-color:var(--green-mid)}
@@ -120,10 +121,10 @@ header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items
 .action-label.ANTECIPAR{color:var(--red)}.action-label.NORMAL{color:var(--amber)}.action-label.AGUARDAR{color:var(--green)}
 .action-text{font-size:13px;font-weight:500;color:var(--ink);line-height:1.55}
 
-.stat-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
-.sl-row{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--bg);border-radius:5px;border:1px solid var(--border)}
-.sl-label{font-size:11px;color:var(--ink3);font-weight:500}
-.sl-value{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--ink)}
+.stat-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;overflow:hidden;width:100%}
+.sl-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 10px;background:var(--bg);border-radius:5px;border:1px solid var(--border);overflow:hidden}
+.sl-label{font-size:11px;color:var(--ink3);font-weight:500;flex-shrink:0;padding-top:1px}
+.sl-value{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--ink);text-align:right;min-width:0;flex:1;padding-left:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sl-value.pos{color:var(--red)}.sl-value.neg{color:var(--green)}
 
 .sazon-mini-label{font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px}
@@ -160,7 +161,7 @@ header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{background:var(--panel);border-radius:12px;max-width:780px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal{background:var(--panel);border-radius:12px;max-width:780px;width:100%;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .modal-header{background:var(--ink);padding:20px 28px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1}
 .modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#e8c96e}
 .modal-close{background:rgba(255,255,255,.1);border:none;color:white;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
@@ -198,282 +199,57 @@ header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items
 .se-sinal{font-size:10px;font-weight:600;margin-top:4px;padding:2px 6px;border-radius:3px}
 
 /* ── FOOTER ── */
-.footer-bar{background:var(--ink);padding:10px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.footer-bar{background:var(--ink);padding:10px 32px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .footer-note{font-family:'JetBrains Mono',monospace;font-size:9px;color:#555}
+.sazon-panel{background:var(--panel);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.sazon-panel-header{background:var(--ink);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.sazon-panel-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#e8c96e}
+.sazon-panel-subtitle{font-size:11px;color:#888;font-family:'JetBrains Mono',monospace}
+.sazon-panel-body{padding:20px 24px}
+.sazon-intro{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.sazon-intro-card{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:14px 16px}
+.sic-num{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--ink);line-height:1;margin-bottom:6px}
+.sic-titulo{font-size:11px;font-weight:700;color:var(--ink2);margin-bottom:5px}
+.sic-texto{font-size:11px;color:var(--ink3);line-height:1.55}
+.sazon-products{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.sazon-prod-card{border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.spc-header{padding:10px 12px 8px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.spc-emoji{font-size:18px}.spc-nome{font-size:11px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px}
+.spc-mes-atual{padding:10px 12px;display:flex;align-items:center;gap:8px}
+.spc-mes-atual.up{background:var(--red-lt)}.spc-mes-atual.down{background:var(--green-lt)}.spc-mes-atual.flat{background:var(--bg)}
+.spc-icon{font-size:18px;flex-shrink:0}
+.spc-mes-nome{font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:.8px;text-transform:uppercase}
+.spc-mes-pct{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;line-height:1;margin:2px 0}
+.spc-mes-pct.up{color:var(--red)}.spc-mes-pct.down{color:var(--green)}.spc-mes-pct.flat{color:var(--ink3)}
+.spc-mes-texto{font-size:10px;color:var(--ink2);line-height:1.4;font-weight:500}
+.spc-barras{padding:8px 12px 4px;border-top:1px solid var(--border);background:var(--bg)}
+.spc-barras-label{font-size:8px;color:var(--ink4);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+.spc-barras-grid{display:flex;align-items:flex-end;gap:2px;height:36px}
+.spc-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:2px}
+.spc-bar{width:100%;border-radius:2px 2px 0 0;min-height:1px}.spc-bar.up{background:var(--red)}.spc-bar.down{background:var(--green)}
+.spc-bar-lbl{font-size:7px;font-family:'JetBrains Mono',monospace;color:var(--ink4);line-height:1}
+.spc-bar-lbl.cur{color:var(--ink);font-weight:700}
+.spc-extremos{padding:8px 12px 10px;display:flex;gap:8px}
+.spc-ext-item{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:6px 8px;text-align:center}
+.spc-ext-label{font-size:8px;color:var(--ink4);letter-spacing:.6px;text-transform:uppercase;margin-bottom:3px;font-weight:600}
+.spc-ext-mes{font-size:11px;font-weight:700;color:var(--ink)}
+.spc-ext-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700}
+.spc-ext-val.up{color:var(--red)}.spc-ext-val.down{color:var(--green)}
+.sazon-aviso{margin-top:16px;padding:12px 16px;background:var(--amber-bg);border:1px solid var(--amber-mid);border-radius:6px;display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--amber);line-height:1.55}
+.sazon-aviso strong{font-weight:700}
 
+.pcard-fonte{display:flex;align-items:center;padding:4px 8px;gap:5px;margin-bottom:8px;background:var(--bg);border-radius:4px;border:1px solid var(--border)}
+.pcard-fonte-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--ink3);letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
+.pcard-fonte-data{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink4);margin-left:auto}
+.pcard-fonte-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.pcard-fonte-dot.ok{background:#10b981}.pcard-fonte-dot.est{background:#d97706}
+
+#det-chart{max-width:100%}
+.mini-spark{max-width:100%}
 /* ── RESPONSIVE ── */
-@media(max-width:1200px){.product-grid{grid-template-columns:repeat(3,1fr)}.detail-panel.open{grid-template-columns:1fr}.score-breakdown{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:700px){.product-grid{grid-template-columns:repeat(2,1fr)}.main{padding:16px}header,.footer-bar{padding-left:16px;padding-right:16px}.legend-bar{padding:8px 16px;gap:12px}.leg-note,.btn-metodologia{display:none}}
-
-/* Fonte no card */
-.pcard-fonte {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 4px;
-  margin-bottom: 8px;
-  padding: 4px 7px;
-  background: var(--bg);
-  border-radius: 4px;
-  border: 1px solid var(--border);
-}
-.pcard-fonte-badge {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--ink3);
-  letter-spacing: .4px;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.pcard-fonte-data {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  color: var(--ink4);
-  margin-left: auto;
-}
-.pcard-fonte-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.pcard-fonte-dot.ok { background: #10b981; }
-.pcard-fonte-dot.est { background: #d97706; }
-
-
-
-
-/* ── PAINEL SAZONALIDADE (abaixo dos cards) ── */
-.sazon-panel {
-  background: var(--panel);
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.sazon-panel-header {
-  background: var(--ink);
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.sazon-panel-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 2px;
-  color: #e8c96e;
-}
-.sazon-panel-subtitle {
-  font-size: 11px;
-  color: #888;
-  font-family: 'JetBrains Mono', monospace;
-}
-.sazon-panel-body {
-  padding: 20px 24px;
-}
-
-/* Explicação intro */
-.sazon-intro {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-.sazon-intro-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 14px 16px;
-}
-.sic-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  color: var(--ink);
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.sic-titulo {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--ink2);
-  margin-bottom: 5px;
-  letter-spacing: .3px;
-}
-.sic-texto {
-  font-size: 11px;
-  color: var(--ink3);
-  line-height: 1.55;
-}
-
-/* Grid de produtos */
-.sazon-products {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 14px;
-}
-.sazon-prod-card {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.spc-header {
-  padding: 10px 12px 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border-bottom: 1px solid var(--border);
-}
-.spc-emoji { font-size: 18px; }
-.spc-nome {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--ink2);
-  text-transform: uppercase;
-  letter-spacing: .5px;
-}
-
-/* Destaque do mês atual */
-.spc-mes-atual {
-  padding: 10px 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.spc-mes-atual.up   { background: var(--red-lt); }
-.spc-mes-atual.down { background: var(--green-lt); }
-.spc-mes-atual.flat { background: var(--bg); }
-.spc-icon { font-size: 18px; flex-shrink: 0; }
-.spc-mes-info {}
-.spc-mes-nome {
-  font-size: 9px;
-  font-weight: 600;
-  color: var(--ink3);
-  letter-spacing: .8px;
-  text-transform: uppercase;
-}
-.spc-mes-pct {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1;
-  margin: 2px 0;
-}
-.spc-mes-pct.up   { color: var(--red); }
-.spc-mes-pct.down { color: var(--green); }
-.spc-mes-pct.flat { color: var(--ink3); }
-.spc-mes-texto {
-  font-size: 10px;
-  color: var(--ink2);
-  line-height: 1.4;
-  font-weight: 500;
-}
-
-/* Mini barras 12 meses */
-.spc-barras {
-  padding: 8px 12px 4px;
-  border-top: 1px solid var(--border);
-  background: var(--bg);
-}
-.spc-barras-label {
-  font-size: 8px;
-  color: var(--ink4);
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-}
-.spc-barras-grid {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 36px;
-}
-.spc-bar-wrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  height: 36px;
-  gap: 2px;
-}
-.spc-bar {
-  width: 100%;
-  border-radius: 2px 2px 0 0;
-  min-height: 1px;
-  transition: opacity .2s;
-}
-.spc-bar.up   { background: var(--red); }
-.spc-bar.down { background: var(--green); }
-.spc-bar.up.cur, .spc-bar.down.cur {
-  outline: 2px solid var(--ink);
-  outline-offset: 1px;
-  opacity: 1 !important;
-}
-.spc-bar-lbl {
-  font-size: 7px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--ink4);
-  line-height: 1;
-}
-.spc-bar-lbl.cur {
-  color: var(--ink);
-  font-weight: 700;
-}
-
-/* Tabela de meses — melhor/pior */
-.spc-extremos {
-  padding: 8px 12px 10px;
-  display: flex;
-  gap: 8px;
-}
-.spc-ext-item {
-  flex: 1;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  padding: 6px 8px;
-  text-align: center;
-}
-.spc-ext-label {
-  font-size: 8px;
-  color: var(--ink4);
-  letter-spacing: .6px;
-  text-transform: uppercase;
-  margin-bottom: 3px;
-  font-weight: 600;
-}
-.spc-ext-mes {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--ink);
-}
-.spc-ext-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-}
-.spc-ext-val.up   { color: var(--red); }
-.spc-ext-val.down { color: var(--green); }
-
-/* Aviso metodológico */
-.sazon-aviso {
-  margin-top: 16px;
-  padding: 12px 16px;
-  background: var(--amber-bg);
-  border: 1px solid var(--amber-mid);
-  border-radius: 6px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 11px;
-  color: var(--amber);
-  line-height: 1.55;
-}
-.sazon-aviso strong { font-weight: 700; }
-
+@media(max-width:1200px){.product-grid{grid-template-columns:repeat(3,1fr)}.detail-panel.open{grid-template-columns:1fr}.detail-left{border-right:none;border-bottom:1px solid var(--border)}.score-breakdown{grid-template-columns:repeat(2,1fr)}.sazon-intro{grid-template-columns:repeat(2,1fr)}.sazon-products{grid-template-columns:repeat(3,1fr)}.score-example{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){*{-webkit-tap-highlight-color:transparent}body{-webkit-text-size-adjust:100%;text-size-adjust:100%}.main{padding:10px;gap:12px}header{padding:8px 12px;height:auto;flex-wrap:wrap;gap:6px}.logo-mark{font-size:17px}.logo-divider,.logo-sub{display:none}.ptax-chip{font-size:10px;padding:3px 7px}.live-badge{font-size:9px}.legend-bar{padding:6px 12px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.legend-bar::-webkit-scrollbar{display:none}.leg-note,.btn-metodologia,.leg-sep{display:none}.leg-item{font-size:10px;white-space:nowrap;flex-shrink:0}.product-grid{grid-template-columns:repeat(2,1fr);gap:9px}.pcard-body{padding:9px 10px 8px}.pcard-name{font-size:10px}.pcard-emoji{font-size:15px}.pcard-signal{font-size:19px;margin-bottom:5px}.score-num{font-size:9px}.pcard-price-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px;margin-bottom:4px}.pcard-price{font-size:15px}.pcard-unit{font-size:9px}.pcard-var{font-size:9px;margin-left:auto;white-space:nowrap;flex-shrink:0}.pos-bar-label{font-size:8px}.pcard-fonte{padding:3px 5px;gap:3px;margin-bottom:5px}.pcard-fonte-badge{font-size:7px}.pcard-fonte-data{font-size:7px}.pcard-fonte-dot{width:4px;height:4px}.news-row{padding-top:8px;gap:5px}.news-label{font-size:8px;width:40px}.news-val{font-size:10px;width:13px}.news-slider{height:5px}.news-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px}.news-slider::-moz-range-thumb{width:22px;height:22px}.detail-panel.open{display:block}.detail-left{padding:12px}.detail-right{padding:12px;border-top:1px solid var(--border);overflow:hidden;width:100%;max-width:100%;box-sizing:border-box}.detail-product-header{gap:8px;margin-bottom:12px;flex-wrap:wrap}.dph-emoji{font-size:22px}.dph-name{font-size:22px}.dph-sub{font-size:10px}.dph-signal{font-size:13px;padding:3px 9px;margin-left:0;margin-top:2px}.score-breakdown{grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:12px}.sb-score{font-size:19px}.sb-label{font-size:8px}.sb-weight{font-size:8px}.sb-item{padding:7px 9px}.chart-label{font-size:9px}.sl-row{padding:5px 8px;display:grid;grid-template-columns:auto 1fr;gap:4px 8px;align-items:start}.sl-label{font-size:10px;color:var(--ink3);white-space:nowrap}.sl-value{font-size:10px;font-weight:700;color:var(--ink);word-break:break-word;overflow-wrap:anywhere;text-align:right;justify-self:end;max-width:100%}.action-box{padding:11px}.action-label{font-size:8px}.action-text{font-size:11px}.sazon-mini-label{font-size:8px}.sazon-bars-mini{height:32px}.tooltip-box{position:fixed !important;bottom:0 !important;left:0 !important;right:0 !important;top:auto !important;width:100% !important;max-width:100% !important;border-radius:14px 14px 0 0;padding:16px;z-index:9999;max-height:65vh;overflow-y:auto;-webkit-overflow-scrolling:touch}.sazon-panel-header{padding:10px 12px;flex-direction:column;align-items:flex-start;gap:4px}.sazon-panel-title{font-size:14px}.sazon-panel-subtitle{font-size:10px}.sazon-panel-body{padding:12px}.sazon-intro{grid-template-columns:1fr !important;gap:8px;margin-bottom:14px}.sazon-intro-card{padding:10px 12px}.sic-num{font-size:20px}.sic-titulo{font-size:11px}.sic-texto{font-size:10px}.sazon-products{grid-template-columns:repeat(2,1fr) !important;gap:8px}.spc-header{padding:8px 9px 6px}.spc-emoji{font-size:15px}.spc-nome{font-size:9px}.spc-mes-atual{padding:7px 9px;gap:7px}.spc-icon{font-size:14px}.spc-mes-nome{font-size:8px}.spc-mes-pct{font-size:14px}.spc-mes-texto{font-size:9px}.spc-barras{padding:5px 9px 3px}.spc-barras-label{font-size:6px}.spc-barras-grid{height:26px}.spc-bar-lbl{font-size:6px}.spc-extremos{padding:5px 9px 7px;gap:5px}.spc-ext-label{font-size:7px}.spc-ext-mes{font-size:10px}.spc-ext-val{font-size:10px}.sazon-aviso{padding:9px 11px;font-size:10px;gap:7px}.modal-overlay{padding:0;align-items:flex-end}.modal{border-radius:14px 14px 0 0;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;width:100%;max-width:100%}.modal-header{padding:12px 14px;border-radius:14px 14px 0 0}.modal-title{font-size:17px}.modal-body{padding:12px 14px 28px}.m-section{margin-bottom:18px}.m-h2{font-size:14px}.m-h2-num{font-size:9px;padding:2px 6px}.m-p{font-size:11px}.m-formula{font-size:10px;padding:7px 9px}.m-table{font-size:10px}.m-table th{font-size:9px;padding:5px 7px}.m-table td{padding:5px 7px}.m-table td:first-child{white-space:normal}.m-callout{font-size:10px;padding:8px 10px}.m-steps li{font-size:10px}.score-example{grid-template-columns:repeat(3,1fr);gap:5px}.se-produto{font-size:8px}.se-score{font-size:16px}.se-sinal{font-size:9px}.footer-bar{padding:7px 12px;padding-bottom:max(7px,env(safe-area-inset-bottom));gap:3px}.footer-note{font-size:8px}}
+@media(max-width:380px){.product-grid{grid-template-columns:1fr}.sazon-products{grid-template-columns:1fr !important}.score-example{grid-template-columns:repeat(2,1fr)}.pcard-price{font-size:20px}.pcard-signal{font-size:23px}}
 </style>
 </head>
 <body>
@@ -801,7 +577,7 @@ header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items
 // ══════════════════════════════════════════════════════════
 //  DADOS
 // ══════════════════════════════════════════════════════════
-const RAW = {"data_base":"24/04/2026","hora_coleta":"17:27","stats":{"boi_cepea_brl_arroba":{"nome":"Boi Gordo","emoji":"🐄","unidade":"R$/@","grupo":"Proteínas","fonte_label":"CEPEA/B3","fonte_desc":"CEPEA/B3 · Boi Gordo","data_ref":"24/04/2026","estimado":false,"last":362.4,"var7":-0.7,"var30":0.4,"var90":4.0,"mm20":364.77,"mm60":355.86,"vol30":4.8,"score":3,"sinal":"ALTA","probs":[10.0,20.0,70.0],"metodo":"técnico","acc":43.0,"f1":null,"prec_alta":38.2,"prec_baixa":24.0,"sazon":[2.1,0.2,1.3,0.6,-0.5,-3.8,1.7,-1.1,-2.2,0.2,0.7,1.2],"min":301.8,"max":367.3,"hist":[318.85,323.7,322.65,322.45,321.6,322.1,320.8,318.0,319.5,319.2,319.4,318.05,321.4,326.9,336.95,344.05,348.55,353.15,346.05,346.6,350.65,355.45,360.9,365.6,365.1,362.4],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"frango_congelado_brl_kg":{"nome":"Frango Congelado","emoji":"🐔","unidade":"R$/kg","grupo":"Proteínas","fonte_label":"CEPEA","fonte_desc":"CEPEA · Frango Congelado","data_ref":"24/04/2026","estimado":false,"last":7.23,"var7":-1.5,"var30":-0.1,"var90":-0.8,"mm20":7.3,"mm60":7.13,"vol30":10.4,"score":-3,"sinal":"LATERAL","probs":[26.4,44.7,28.9],"metodo":"GBM","acc":41.8,"f1":null,"prec_alta":47.6,"prec_baixa":39.2,"sazon":[0.5,3.5,1.7,1.3,0.2,-2.3,-4.2,-2.9,0.2,0.2,2.4,2.3],"min":6.81,"max":8.26,"hist":[8.01,8.03,8.05,8.11,8.11,8.1,8.11,8.09,8.1,8.07,7.51,7.28,7.25,6.99,6.97,7.31,7.29,7.26,7.06,7.03,6.81,6.95,7.24,7.27,7.34,7.23],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"suino_sp_brl_kg":{"nome":"Suíno SP","emoji":"🐷","unidade":"R$/kg","grupo":"Proteínas","fonte_label":"CEPEA","fonte_desc":"CEPEA · Suíno SP","data_ref":"24/04/2026","estimado":false,"last":5.56,"var7":-3.3,"var30":-14.7,"var90":-19.1,"mm20":5.95,"mm60":6.58,"vol30":21.5,"score":-5,"sinal":"ALTA","probs":[4.5,7.0,88.5],"metodo":"GBM","acc":55.7,"f1":null,"prec_alta":59.9,"prec_baixa":55.9,"sazon":[0.3,-0.7,-0.2,0.6,-1.5,-0.7,-1.6,-0.8,-1.5,0.8,0.1,3.1],"min":5.56,"max":9.47,"hist":[8.77,8.76,8.86,8.81,8.84,8.82,8.79,8.87,8.92,8.95,8.91,8.59,7.87,7.09,6.91,6.92,6.87,6.9,6.95,6.96,6.97,6.92,6.52,6.17,5.75,5.56],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"ovos_bastos_brl_cx":{"nome":"Ovos Bastos SP","emoji":"🥚","unidade":"R$/cx","grupo":"Proteínas","fonte_label":"CEPEA","fonte_desc":"CEPEA · Ovos Bastos SP","data_ref":"24/04/2026","estimado":false,"last":153.51,"var7":0.7,"var30":-6.5,"var90":-3.5,"mm20":158.12,"mm60":165.86,"vol30":56.1,"score":-3,"sinal":"LATERAL","probs":[30.0,45.0,25.0],"metodo":"técnico","acc":null,"f1":null,"prec_alta":null,"prec_baixa":null,"sazon":[2.0,1.5,-0.5,-1.5,-2.0,-1.0,0.5,1.5,2.0,1.5,1.0,2.5],"min":83.29,"max":196.13,"hist":[143.27,139.09,129.15,123.86,128.73,136.56,119.19,118.77,102.39,89.57,84.22,123.25,121.5,139.15,152.25,161.36,159.04,159.04,168.76,196.13,174.02,163.94,164.2,164.01,152.51,153.51],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"milho_brl_sc":{"nome":"Milho ESALQ","emoji":"🌽","unidade":"R$/sc","grupo":"Grãos","fonte_label":"CEPEA/ESALQ","fonte_desc":"CEPEA/ESALQ · Milho ESALQ","data_ref":"24/04/2026","estimado":false,"last":66.36,"var7":-0.7,"var30":-5.1,"var90":-3.5,"mm20":67.97,"mm60":69.73,"vol30":5.6,"score":-5,"sinal":"BAIXA","probs":[70.0,20.0,10.0],"metodo":"técnico","acc":40.0,"f1":null,"prec_alta":44.7,"prec_baixa":38.6,"sazon":[4.5,3.2,0.5,-5.2,-6.1,-4.8,-2.3,-1.1,1.8,3.4,4.1,5.0],"min":63.26,"max":72.1,"hist":[66.15,67.08,67.52,67.67,68.76,70.3,69.46,69.42,69.48,69.45,69.02,68.41,66.63,66.1,66.78,68.14,68.74,69.53,70.56,71.98,71.37,70.34,69.96,69.07,66.81,66.36],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"soja_paranagua_brl_sc":{"nome":"Soja Paranaguá","emoji":"🫘","unidade":"R$/sc","grupo":"Grãos","fonte_label":"CEPEA/ESALQ","fonte_desc":"CEPEA/ESALQ · Soja Paranaguá","data_ref":"24/04/2026","estimado":false,"last":126.9,"var7":0.4,"var30":-1.2,"var90":-1.2,"mm20":127.01,"mm60":128.4,"vol30":7.0,"score":-5,"sinal":"BAIXA","probs":[70.0,20.0,10.0],"metodo":"técnico","acc":39.0,"f1":null,"prec_alta":36.9,"prec_baixa":32.5,"sazon":[1.8,6.2,-0.1,0.2,-1.7,-4.7,-2.4,0.1,3.0,2.6,3.5,5.5],"min":124.34,"max":142.94,"hist":[139.88,138.86,140.08,140.93,141.94,141.75,142.31,142.94,142.62,142.14,133.85,131.45,128.66,124.91,126.43,127.27,128.49,126.83,131.18,130.2,130.61,130.01,128.5,126.58,126.45,126.9],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"soja_pr_brl_sc":{"nome":"Soja PR","emoji":"🫘","unidade":"R$/sc","grupo":"Grãos","fonte_label":"CEPEA/ESALQ","fonte_desc":"CEPEA/ESALQ · Soja PR","data_ref":"24/04/2026","estimado":false,"last":120.49,"var7":0.1,"var30":-1.5,"var90":-0.7,"mm20":120.95,"mm60":121.88,"vol30":5.9,"score":-5,"sinal":"BAIXA","probs":[70.0,20.0,10.0],"metodo":"técnico","acc":39.5,"f1":null,"prec_alta":38.0,"prec_baixa":33.0,"sazon":[1.8,6.2,-0.1,0.2,-1.7,-4.7,-2.4,0.1,3.0,2.6,3.5,5.5],"min":118.69,"max":136.83,"hist":[133.58,133.71,134.57,135.37,136.07,135.45,135.41,136.1,136.23,135.76,128.99,124.6,122.74,119.36,120.86,120.91,121.3,120.7,123.32,123.24,123.41,124.1,122.31,120.94,120.41,120.49],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"trigo_pr_brl_t":{"nome":"Trigo PR","emoji":"🌾","unidade":"R$/t","grupo":"Grãos","fonte_label":"CEPEA","fonte_desc":"CEPEA · Trigo PR","data_ref":"24/04/2026","estimado":false,"last":1338.21,"var7":0.7,"var30":3.9,"var90":15.3,"mm20":1314.95,"mm60":1258.4,"vol30":5.7,"score":5,"sinal":"LATERAL","probs":[20.3,50.7,29.0],"metodo":"GBM","acc":46.6,"f1":null,"prec_alta":49.3,"prec_baixa":54.5,"sazon":[1.5,2.0,0.5,-1.0,-2.0,-1.5,0.5,2.0,3.0,2.5,1.0,0.5],"min":1158.45,"max":1425.46,"hist":[1193.61,1197.58,1192.33,1194.18,1194.15,1183.62,1185.08,1182.32,1182.07,1183.57,1178.92,1171.48,1182.04,1172.98,1171.18,1165.57,1161.05,1178.08,1207.77,1219.92,1251.47,1268.96,1288.15,1296.92,1329.31,1338.21],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"arroz_brl_sc":{"nome":"Arroz IRGA-RS","emoji":"🍚","unidade":"R$/sc","grupo":"Grãos","fonte_label":"CEPEA/IRGA","fonte_desc":"CEPEA/IRGA · Arroz IRGA-RS","data_ref":"24/04/2026","estimado":false,"last":62.75,"var7":-0.6,"var30":0.7,"var90":13.6,"mm20":62.83,"mm60":60.11,"vol30":3.4,"score":3,"sinal":"ALTA","probs":[10.0,20.0,70.0],"metodo":"técnico","acc":42.6,"f1":null,"prec_alta":38.0,"prec_baixa":54.6,"sazon":[1.0,1.5,0.5,-0.5,-2.0,-2.5,-1.5,0.5,2.0,2.5,2.0,1.5],"min":52.49,"max":68.75,"hist":[56.31,55.51,55.46,53.79,53.28,52.73,52.8,53.45,53.45,53.45,53.16,53.05,53.72,54.01,54.35,54.59,55.26,55.51,56.49,58.45,60.0,61.83,62.32,62.88,63.13,62.75],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"cafe_arabica_brl_sc":{"nome":"Café Arábica","emoji":"☕","unidade":"R$/sc","grupo":"Outros","fonte_label":"CEPEA/ESALQ","fonte_desc":"CEPEA/ESALQ · Café Arábica","data_ref":"24/04/2026","estimado":false,"last":1817.26,"var7":2.9,"var30":-2.9,"var90":0.6,"mm20":1809.23,"mm60":1866.39,"vol30":16.6,"score":-1,"sinal":"BAIXA","probs":[70.0,20.0,10.0],"metodo":"técnico","acc":36.9,"f1":null,"prec_alta":45.9,"prec_baixa":34.1,"sazon":[1.0,2.5,1.5,0.5,-1.0,-2.0,-1.5,0.5,2.0,3.0,2.5,1.5],"min":1765.66,"max":2376.04,"hist":[2206.59,2290.64,2204.71,2181.7,2252.95,2217.02,2253.93,2135.34,2167.55,2171.95,2225.39,2180.2,2135.31,2094.55,1884.66,1901.38,1806.48,1797.61,1913.12,1878.47,1962.67,1947.89,1870.64,1814.56,1765.66,1817.26],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"acucar_brl_sc":{"nome":"Açúcar Cristal SP","emoji":"🍬","unidade":"R$/sc","grupo":"Outros","fonte_label":"CEPEA/ESALQ","fonte_desc":"CEPEA/ESALQ · Açúcar Cristal SP","data_ref":"24/04/2026","estimado":false,"last":96.06,"var7":-3.8,"var30":-8.6,"var90":-4.4,"mm20":101.55,"mm60":100.61,"vol30":16.8,"score":-5,"sinal":"LATERAL","probs":[21.8,44.1,34.1],"metodo":"GBM","acc":42.8,"f1":null,"prec_alta":57.6,"prec_baixa":36.0,"sazon":[1.0,1.5,0.5,-0.5,-1.5,-2.0,-1.0,0.5,1.5,2.0,1.5,1.0],"min":95.79,"max":121.18,"hist":[113.65,107.16,106.41,106.5,108.5,107.39,110.43,110.75,110.63,109.99,106.65,103.97,104.84,104.89,100.63,99.51,100.45,98.59,97.38,97.24,101.32,103.29,105.06,105.78,99.9,96.06],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]}}};
+const RAW = {"data_base":"21/04/2026","hora_coleta":"07:30","stats":{"milho_esalq_brl_saca":{"nome":"Milho ESALQ","emoji":"🌽","unidade":"R$/saca","last":71.5,"var7":0.8,"var30":-2.1,"var90":-12.4,"mm20":72.1,"mm60":74.8,"vol30":18.2,"score":-1,"sinal":"LATERAL","probs":[30,45,25],"acc":59.1,"f1":0.55,"sazon":[4.5,3.2,0.5,-5.2,-6.1,-4.8,-2.3,-1.1,1.8,3.4,4.1,5.0],"min":58,"max":88,"fonte_label":"CEPEA/ESALQ","fonte_desc":"Ind. Milho ESALQ/BM&F · Campinas SP","data_ref":"06/04/2026","hist":[67,65,63,60,58,60,62,63,65,64,62,60,61,63,65,68,70,71,72,73,72,71,70,69,70,71.5],"dates":["28/10/25","04/11/25","11/11/25","18/11/25","25/11/25","02/12/25","09/12/25","16/12/25","23/12/25","30/12/25","06/01/26","13/01/26","20/01/26","27/01/26","03/02/26","10/02/26","17/02/26","24/02/26","03/03/26","10/03/26","17/03/26","24/03/26","31/03/26","07/04/26","14/04/26","21/04/26"]},"soja_esalq_brl_saca":{"nome":"Soja ESALQ","emoji":"🫘","unidade":"R$/saca","last":125.0,"var7":-1.2,"var30":-8.3,"var90":-15.1,"mm20":128.5,"mm60":133.4,"vol30":14.3,"score":-3,"sinal":"BAIXA","probs":[55,30,15],"acc":47.2,"f1":0.46,"sazon":[1.8,6.2,-0.1,0.2,-1.7,-4.7,-2.4,0.1,3.0,2.6,3.5,5.5],"min":118,"max":152,"fonte_label":"CEPEA/ESALQ","fonte_desc":"Ind. Soja CEPEA/ESALQ · Paranaguá PR","data_ref":"06/04/2026","hist":[148,145,143,140,138,135,133,132,134,136,135,133,132,130,131,132,130,129,128,130,129,128,127,126,125,125],"dates":["28/10/25","04/11/25","11/11/25","18/11/25","25/11/25","02/12/25","09/12/25","16/12/25","23/12/25","30/12/25","06/01/26","13/01/26","20/01/26","27/01/26","03/02/26","10/02/26","17/02/26","24/02/26","03/03/26","10/03/26","17/03/26","24/03/26","31/03/26","07/04/26","14/04/26","21/04/26"]},"frango_brl_kg":{"nome":"Frango","emoji":"🐔","unidade":"R$/kg","last":7.0,"var7":-0.4,"var30":1.3,"var90":-16.7,"mm20":7.02,"mm60":7.18,"vol30":10.1,"score":1,"sinal":"LATERAL","probs":[20,45,35],"acc":49.2,"f1":0.47,"sazon":[0.5,3.5,1.7,1.3,0.2,-2.3,-4.2,-2.9,0.2,0.2,2.4,2.3],"min":5.75,"max":8.6,"fonte_label":"CEPEA","fonte_desc":"Frango congelado atacado paulista · CEPEA SP","data_ref":"02/04/2026","hist":[8.4,8.2,8.0,7.9,7.8,7.6,7.5,7.4,7.3,7.2,7.1,7.0,6.9,6.85,6.8,6.85,6.9,6.95,7.0,7.0,7.0,7.0,7.0,7.0,7.0,7.0],"dates":["28/10/25","04/11/25","11/11/25","18/11/25","25/11/25","02/12/25","09/12/25","16/12/25","23/12/25","30/12/25","06/01/26","13/01/26","20/01/26","27/01/26","03/02/26","10/02/26","17/02/26","24/02/26","03/03/26","10/03/26","17/03/26","24/03/26","31/03/26","07/04/26","14/04/26","21/04/26"]},"suino_brl_kg":{"nome":"Suíno","emoji":"🐷","unidade":"R$/kg","last":5.7,"var7":-1.5,"var30":-25.0,"var90":-28.0,"mm20":5.85,"mm60":7.1,"vol30":22.4,"score":-3,"sinal":"BAIXA","probs":[62,28,10],"acc":54.0,"f1":0.45,"sazon":[0.3,-0.7,-0.2,0.6,-1.5,-0.7,-1.6,-0.8,-1.5,0.8,0.1,3.1],"min":4.9,"max":10.5,"fonte_label":"CEPEA","fonte_desc":"Suíno vivo SP · CEPEA (−25% desde dez/25)","data_ref":"02/04/2026","hist":[9.8,9.5,9.2,8.8,8.5,8.2,7.9,7.6,7.5,7.4,7.2,7.0,6.8,6.6,6.5,6.4,6.3,6.2,6.1,6.0,5.95,5.9,5.85,5.8,5.75,5.7],"dates":["28/10/25","04/11/25","11/11/25","18/11/25","25/11/25","02/12/25","09/12/25","16/12/25","23/12/25","30/12/25","06/01/26","13/01/26","20/01/26","27/01/26","03/02/26","10/02/26","17/02/26","24/02/26","03/03/26","10/03/26","17/03/26","24/03/26","31/03/26","07/04/26","14/04/26","21/04/26"]},"boi_cepea_brl_arroba":{"nome":"Boi Gordo","emoji":"🐄","unidade":"R$/@","last":367.3,"var7":0.6,"var30":11.5,"var90":18.3,"mm20":362.1,"mm60":338.4,"vol30":10.8,"score":5,"sinal":"ALTA","probs":[5,15,80],"acc":42.5,"f1":0.42,"sazon":[2.1,0.2,1.3,0.6,-0.5,-3.8,1.7,-1.1,-2.2,0.2,0.7,1.2],"min":274,"max":370,"fonte_label":"CEPEA/B3","fonte_desc":"Ind. Boi Gordo CEPEA/B3 · máxima histórica","data_ref":"15/04/2026","hist":[298,300,302,305,308,310,308,312,315,318,320,322,325,328,330,332,335,338,340,342,344,348,352,356,362,367.3],"dates":["28/10/25","04/11/25","11/11/25","18/11/25","25/11/25","02/12/25","09/12/25","16/12/25","23/12/25","30/12/25","06/01/26","13/01/26","20/01/26","27/01/26","03/02/26","10/02/26","17/02/26","24/02/26","03/03/26","10/03/26","17/03/26","24/03/26","31/03/26","07/04/26","14/04/26","21/04/26"]},"ptax_venda":{"nome":"PTAX","emoji":"💵","unidade":"R$/USD","last":4.98,"var7":-0.6,"var30":-3.2,"var90":-8.4,"mm20":5.02,"mm60":5.22,"vol30":14.6,"score":-2,"sinal":"BAIXA","probs":[55,30,15],"acc":null,"f1":null,"sazon":[0.2,0.9,2.2,0.6,-3.0,0.7,1.0,1.5,2.8,2.7,-0.4,3.2],"min":4.7,"max":6.2,"fonte_label":"BCB PTAX","fonte_desc":"PTAX fechamento · Banco Central do Brasil","data_ref":"20/04/2026","hist":[5.8,5.75,5.7,5.65,5.6,5.55,5.5,5.45,5.4,5.38,5.35,5.32,5.3,5.28,5.25,5.22,5.2,5.18,5.15,5.1,5.08,5.05,5.03,5.01,4.98,4.98],"dates":["28/10/25","04/11/25","11/11/25","18/11/25","25/11/25","02/12/25","09/12/25","16/12/25","23/12/25","30/12/25","06/01/26","13/01/26","20/01/26","27/01/26","03/02/26","10/02/26","17/02/26","24/02/26","03/03/26","10/03/26","17/03/26","24/03/26","31/03/26","07/04/26","14/04/26","21/04/26"]}}};
 
 // ══════════════════════════════════════════════════════════
 //  TOOLTIPS (explicações inline nos componentes)
