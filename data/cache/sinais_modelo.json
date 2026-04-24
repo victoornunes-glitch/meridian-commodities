@@ -1,0 +1,134 @@
+{
+  "milho_brl_sc": {
+    "sinal": "BAIXA",
+    "probs": [
+      70.0,
+      20.0,
+      10.0
+    ],
+    "metodo": "técnico",
+    "acc": 40.0,
+    "prec_alta": 44.7,
+    "prec_baixa": 38.6
+  },
+  "soja_paranagua_brl_sc": {
+    "sinal": "BAIXA",
+    "probs": [
+      70.0,
+      20.0,
+      10.0
+    ],
+    "metodo": "técnico",
+    "acc": 39.0,
+    "prec_alta": 36.9,
+    "prec_baixa": 32.5
+  },
+  "boi_cepea_brl_arroba": {
+    "sinal": "ALTA",
+    "probs": [
+      10.0,
+      20.0,
+      70.0
+    ],
+    "metodo": "técnico",
+    "acc": 43.0,
+    "prec_alta": 38.2,
+    "prec_baixa": 24.0
+  },
+  "frango_congelado_brl_kg": {
+    "sinal": "LATERAL",
+    "probs": [
+      26.4,
+      44.7,
+      28.9
+    ],
+    "metodo": "GBM",
+    "acc": 41.8,
+    "prec_alta": 47.6,
+    "prec_baixa": 39.2
+  },
+  "suino_sp_brl_kg": {
+    "sinal": "ALTA",
+    "probs": [
+      4.5,
+      7.0,
+      88.5
+    ],
+    "metodo": "GBM",
+    "acc": 55.7,
+    "prec_alta": 59.9,
+    "prec_baixa": 55.9
+  },
+  "arroz_brl_sc": {
+    "sinal": "ALTA",
+    "probs": [
+      10.0,
+      20.0,
+      70.0
+    ],
+    "metodo": "técnico",
+    "acc": 42.6,
+    "prec_alta": 38.0,
+    "prec_baixa": 54.6
+  },
+  "cafe_arabica_brl_sc": {
+    "sinal": "BAIXA",
+    "probs": [
+      70.0,
+      20.0,
+      10.0
+    ],
+    "metodo": "técnico",
+    "acc": 36.9,
+    "prec_alta": 45.9,
+    "prec_baixa": 34.1
+  },
+  "acucar_brl_sc": {
+    "sinal": "LATERAL",
+    "probs": [
+      21.8,
+      44.1,
+      34.1
+    ],
+    "metodo": "GBM",
+    "acc": 42.8,
+    "prec_alta": 57.6,
+    "prec_baixa": 36.0
+  },
+  "trigo_pr_brl_t": {
+    "sinal": "LATERAL",
+    "probs": [
+      20.3,
+      50.7,
+      29.0
+    ],
+    "metodo": "GBM",
+    "acc": 46.6,
+    "prec_alta": 49.3,
+    "prec_baixa": 54.5
+  },
+  "soja_pr_brl_sc": {
+    "sinal": "BAIXA",
+    "probs": [
+      70.0,
+      20.0,
+      10.0
+    ],
+    "metodo": "técnico",
+    "acc": 39.5,
+    "prec_alta": 38.0,
+    "prec_baixa": 33.0
+  },
+  "ovos_bastos_brl_cx": {
+    "sinal": "LATERAL",
+    "probs": [
+      30.0,
+      45.0,
+      25.0
+    ],
+    "metodo": "técnico",
+    "acc": null,
+    "prec_alta": null,
+    "prec_baixa": null
+  }
+}
