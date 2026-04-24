@@ -1,10 +1,32 @@
 {
   "data_base": "24/04/2026",
-  "hora_coleta": "16:14",
+  "hora_coleta": "16:37",
   "produtos": {
+    "boi_cepea_brl_arroba": "ALTA",
+    "frango_congelado_brl_kg": "LATERAL",
+    "suino_sp_brl_kg": "BAIXA",
+    "ovos_bastos_brl_cx": "LATERAL",
+    "milho_brl_sc": "BAIXA",
+    "soja_paranagua_brl_sc": "BAIXA",
+    "soja_pr_brl_sc": "BAIXA",
+    "trigo_pr_brl_t": "ALTA",
+    "arroz_brl_sc": "ALTA",
+    "cafe_arabica_brl_sc": "BAIXA",
+    "acucar_brl_sc": "BAIXA",
     "ptax_venda": "BAIXA"
   },
   "fontes": {
+    "boi_cepea_brl_arroba": "CEPEA/B3",
+    "frango_congelado_brl_kg": "CEPEA",
+    "suino_sp_brl_kg": "CEPEA",
+    "ovos_bastos_brl_cx": "CEPEA",
+    "milho_brl_sc": "CEPEA/ESALQ",
+    "soja_paranagua_brl_sc": "CEPEA/ESALQ",
+    "soja_pr_brl_sc": "CEPEA/ESALQ",
+    "trigo_pr_brl_t": "CEPEA",
+    "arroz_brl_sc": "CEPEA/IRGA",
+    "cafe_arabica_brl_sc": "CEPEA/ESALQ",
+    "acucar_brl_sc": "CEPEA/ESALQ",
     "ptax_venda": "BCB PTAX"
   }
 }
