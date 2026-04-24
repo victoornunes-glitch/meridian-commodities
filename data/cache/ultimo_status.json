@@ -1,6 +1,6 @@
 {
   "data_base": "24/04/2026",
-  "hora_coleta": "17:27",
+  "hora_coleta": "18:17",
   "produtos": {
     "boi_cepea_brl_arroba": "ALTA",
     "frango_congelado_brl_kg": "LATERAL",
@@ -12,7 +12,8 @@
     "trigo_pr_brl_t": "LATERAL",
     "arroz_brl_sc": "ALTA",
     "cafe_arabica_brl_sc": "BAIXA",
-    "acucar_brl_sc": "LATERAL"
+    "acucar_brl_sc": "LATERAL",
+    "ptax_venda": "BAIXA"
   },
   "fontes": {
     "boi_cepea_brl_arroba": "CEPEA/B3",
@@ -25,6 +26,7 @@
     "trigo_pr_brl_t": "CEPEA",
     "arroz_brl_sc": "CEPEA/IRGA",
     "cafe_arabica_brl_sc": "CEPEA/ESALQ",
-    "acucar_brl_sc": "CEPEA/ESALQ"
+    "acucar_brl_sc": "CEPEA/ESALQ",
+    "ptax_venda": "BCB PTAX"
   }
 }

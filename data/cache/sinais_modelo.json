@@ -130,5 +130,17 @@
     "acc": null,
     "prec_alta": null,
     "prec_baixa": null
+  },
+  "ptax_venda": {
+    "sinal": "BAIXA",
+    "probs": [
+      70.0,
+      20.0,
+      10.0
+    ],
+    "metodo": "técnico",
+    "acc": null,
+    "prec_alta": null,
+    "prec_baixa": null
   }
 }

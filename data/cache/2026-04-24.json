@@ -1,15 +1,17 @@
 {
   "data": "2026-04-24",
   "fontes": {
-    "bcb_ptax": "erro",
+    "bcb_ptax": "ok",
     "yahoo": "ok",
     "cepea": "indisponivel"
   },
   "shape": [
     1827,
-    130
+    146
   ],
   "ultimo": {
+    "ptax_compra": 5.0077,
+    "ptax_venda": 5.0083,
     "ipca_alimentacao": 1.56,
     "igp_m": 0.52,
     "selic_meta": 14.75,
@@ -28,6 +30,18 @@
     "trigo_pr_brl_t": 1338.21,
     "soja_pr_brl_sc": 120.49,
     "ovos_bastos_brl_cx": 153.51,
+    "ptax_compra_var7d": 0.0078,
+    "ptax_compra_var30d": -0.0304,
+    "ptax_compra_var90d": -0.037,
+    "ptax_compra_mm20": 5.0257,
+    "ptax_compra_mm60": 5.1543,
+    "ptax_compra_vol30d": 0.0778,
+    "ptax_venda_var7d": 0.0078,
+    "ptax_venda_var30d": -0.0304,
+    "ptax_venda_var90d": -0.037,
+    "ptax_venda_mm20": 5.0263,
+    "ptax_venda_mm60": 5.1549,
+    "ptax_venda_vol30d": 0.0778,
     "ipca_alimentacao_var7d": 0.0,
     "ipca_alimentacao_var90d": 5.7826,
     "igp_m_var7d": 0.0,
@@ -95,6 +109,8 @@
     "ovos_bastos_brl_cx_var7d": 0.005,
     "ovos_bastos_brl_cx_var30d": -0.0651,
     "ovos_bastos_brl_cx_var90d": 0.0288,
+    "milho_cbot_brl": 118.8,
+    "soja_cbot_brl": 209.1,
     "mes": 4.0,
     "sazon_seno": 0.9243,
     "sazon_cosseno": -0.3817
