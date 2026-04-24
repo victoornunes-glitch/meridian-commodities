@@ -64,11 +64,14 @@ INDICADORES_WIDGET = {
 
 IDS_WIDGET = list(INDICADORES_WIDGET.keys())
 
-WIDGET_HEADERS = {
-    **HEADERS,
-    "Referer": "https://www.noticiasagricolas.com.br/",
-    "Accept": "*/*",
-}
+# CEPEA bloqueia servidores cloud — tentamos múltiplos Referers
+WIDGET_HEADERS_LIST = [
+    {**HEADERS, "Referer": "https://www.noticiasagricolas.com.br/", "Accept": "*/*"},
+    {**HEADERS, "Referer": "https://www.agrolink.com.br/", "Accept": "*/*"},
+    {**HEADERS, "Referer": "https://www.farmnews.com.br/", "Accept": "*/*"},
+    {**HEADERS, "Referer": "https://www.cepea.org.br/", "Accept": "*/*"},
+]
+WIDGET_HEADERS = WIDGET_HEADERS_LIST[0]
 
 
 class ColetorCEPEAWidget:
@@ -78,20 +81,63 @@ class ColetorCEPEAWidget:
         v = v.replace(".", "").replace(",", ".")
         return float(v)
 
+    def _montar_url(self) -> str:
+        ids_str = "&".join([f"id_indicador[]={id_}" for id_ in IDS_WIDGET])
+        return (f"{WIDGET_BASE}?fonte=arial&tamanho=10&largura=400px"
+                f"&corfundo=ffffff&cortexto=333333&corlinha=eeeeee&{ids_str}")
+
+    def _fetch_direto(self, url: str) -> str | None:
+        """Tenta acesso direto com múltiplos headers."""
+        for i, headers in enumerate(WIDGET_HEADERS_LIST):
+            try:
+                r = requests.get(url, headers=headers, timeout=20)
+                r.raise_for_status()
+                if len(r.text) > 200:
+                    log.info(f"CEPEA direto → {len(r.text)} bytes (header {i+1})")
+                    return r.text
+            except Exception as e:
+                log.warning(f"CEPEA direto tentativa {i+1}: {e}")
+                time.sleep(1)
+        return None
+
+    def _fetch_scraperapi(self, url: str) -> str | None:
+        """Usa ScraperAPI como proxy residencial (fallback)."""
+        import os
+        from urllib.parse import quote
+        api_key = os.environ.get("SCRAPER_API_KEY", "")
+        if not api_key:
+            log.warning("SCRAPER_API_KEY não configurada — pulando ScraperAPI")
+            return None
+        proxy_url = (f"http://api.scraperapi.com"
+                     f"?api_key={api_key}"
+                     f"&country_code=br"
+                     f"&render=false"
+                     f"&url={quote(url)}")
+        try:
+            r = requests.get(proxy_url, timeout=30)
+            r.raise_for_status()
+            if len(r.text) > 200:
+                log.info(f"CEPEA via ScraperAPI → {len(r.text)} bytes ✅")
+                return r.text
+        except Exception as e:
+            log.error(f"ScraperAPI falhou: {e}")
+        return None
+
     def coletar(self) -> dict:
         import re
-        ids_str = "&".join([f"id_indicador[]={id_}" for id_ in IDS_WIDGET])
-        url = (f"{WIDGET_BASE}?fonte=arial&tamanho=10&largura=400px"
-               f"&corfundo=ffffff&cortexto=333333&corlinha=eeeeee&{ids_str}")
+        url = self._montar_url()
 
-        log.info("CEPEA Widget → requisição...")
-        try:
-            r = requests.get(url, headers=WIDGET_HEADERS, timeout=20)
-            r.raise_for_status()
-            js = r.text
-            log.info(f"CEPEA Widget → {len(js)} bytes")
-        except Exception as e:
-            log.error(f"CEPEA Widget FALHOU: {e}")
+        # Tentativa 1: acesso direto
+        log.info("CEPEA Widget → tentando acesso direto...")
+        js = self._fetch_direto(url)
+
+        # Tentativa 2: ScraperAPI (proxy residencial)
+        if not js:
+            log.info("CEPEA Widget → tentando ScraperAPI...")
+            js = self._fetch_scraperapi(url)
+
+        if not js:
+            log.error("CEPEA Widget indisponível — dashboard usará histórico CSV")
             return {}
 
         # Salvar JS bruto para debug
@@ -364,7 +410,7 @@ def executar(force=False):
 
     # Salvar status CEPEA para gerar_dashboard usar
     (CACHE_DIR / "cepea_status.json").write_text(
-        json.dumps({k: fontes.get(k, "indisponivel") for k in INDICADORES_WIDGET.values()},
+        json.dumps({v[0]: fontes.get(v[0], "indisponivel") for v in INDICADORES_WIDGET.values()},
                    ensure_ascii=False)
     )
 
