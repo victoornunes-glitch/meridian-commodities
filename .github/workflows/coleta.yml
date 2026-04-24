@@ -41,6 +41,7 @@ jobs:
         run: python src/pipeline.py --force
         env:
           PYTHONPATH: src
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
 
       - name: Gerar dashboard
         run: python src/gerar_dashboard.py
