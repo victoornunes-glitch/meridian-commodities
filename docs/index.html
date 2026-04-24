@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian — Painel de Compras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f0ece4;--bg2:#e8e3da;--bg3:#ddd8ce;--panel:#fff;
+  --ink:#1a1a1a;--ink2:#3d3d3d;--ink3:#6b6b6b;--ink4:#999;
+  --border:#d4cfc6;--border2:#c4bfb5;
+  --red:#c0392b;--red-bg:#fdf0ee;--red-mid:#f4c9c3;--red-lt:#fff5f4;
+  --amber:#b7600a;--amber-bg:#fdf6ec;--amber-mid:#f3ddb5;--amber-lt:#fffaf0;
+  --green:#1a7a45;--green-bg:#eef7f2;--green-mid:#b8dfc8;--green-lt:#f0fdf6;
+  --blue:#1d5fa8;--blue-bg:#eef4fd;--blue-mid:#b8d0f0;
+  --radius:8px;--shadow:0 2px 12px rgba(0,0,0,.07);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+
+/* ── HEADER ── */
+header{background:var(--ink);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:baseline;gap:10px}
+.logo-mark{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#e8c96e}
+.logo-divider{color:#444;font-size:18px}
+.logo-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:#888;letter-spacing:1.5px;text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:20px}
+.live-badge{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#aaa}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.ptax-chip{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:4px 10px;color:#ccc}
+.ptax-chip span{color:#e8c96e;font-weight:700}
+
+/* ── LEGEND ── */
+.legend-bar{background:var(--ink2);padding:8px 32px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:7px;font-size:11px;color:#ccc;font-weight:500}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.leg-dot.red{background:var(--red)}.leg-dot.amber{background:#d97706}.leg-dot.green{background:var(--green)}
+.leg-sep{color:#555;font-size:16px}
+.leg-note{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:#666}
+.btn-metodologia{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#ccc;border-radius:4px;padding:4px 12px;font-size:10px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-metodologia:hover{background:rgba(255,255,255,.14);color:white}
+
+/* ── MAIN ── */
+.main{padding:24px 32px 32px;display:grid;gap:20px}
+
+/* ── PRODUCT GRID ── */
+.product-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.pcard{background:var(--panel);border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .2s;overflow:hidden}
+.pcard:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.pcard.active{border-color:var(--ink);box-shadow:0 4px 24px rgba(0,0,0,.14)}
+.pcard-accent{height:5px}
+.pcard.ANTECIPAR .pcard-accent{background:var(--red)}
+.pcard.NORMAL .pcard-accent{background:#d97706}
+.pcard.AGUARDAR .pcard-accent{background:var(--green)}
+.pcard-body{padding:14px 16px 12px}
+.pcard-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.pcard-name{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.8px;text-transform:uppercase}
+.pcard-emoji{font-size:18px;line-height:1}
+.pcard-signal{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1.5px;line-height:1;margin-bottom:8px}
+.ANTECIPAR .pcard-signal{color:var(--red)}.NORMAL .pcard-signal{color:var(--amber)}.AGUARDAR .pcard-signal{color:var(--green)}
+.score-gauge-wrap{margin-bottom:10px}
+.score-gauge-track{height:5px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.score-gauge-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.ANTECIPAR .score-gauge-fill{background:var(--red)}.NORMAL .score-gauge-fill{background:#d97706}.AGUARDAR .score-gauge-fill{background:var(--green)}
+.score-num{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--ink3);margin-top:4px}
+.pcard-price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:6px}
+.pcard-price{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700;color:var(--ink)}
+.pcard-unit{font-size:10px;color:var(--ink3)}
+.pcard-var{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;margin-left:auto;text-align:right}
+.pcard-var.pos{color:var(--red)}.pcard-var.neg{color:var(--green)}.pcard-var.flat{color:var(--ink3)}
+.pos-bar-wrap{margin-bottom:10px}
+.pos-bar-label{display:flex;justify-content:space-between;font-size:9px;color:var(--ink3);margin-bottom:3px;font-family:'JetBrains Mono',monospace}
+.pos-bar-track{height:3px;background:var(--bg2);border-radius:2px;position:relative}
+.pos-bar-marker{position:absolute;top:-3px;width:9px;height:9px;border-radius:50%;background:var(--ink);border:2px solid white;transform:translateX(-50%);transition:left .6s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.mini-spark{margin-bottom:10px;display:block}
+.news-row{border-top:1px solid var(--bg2);padding-top:10px;display:flex;align-items:center;gap:8px}
+.news-label{font-size:9px;color:var(--ink3);font-weight:600;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;width:50px}
+.news-slider{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;outline:none;cursor:pointer;border:none}
+.news-slider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--ink);border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+.news-slider::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--ink);border:2px solid white;cursor:pointer}
+.news-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;width:16px;text-align:right;color:var(--ink)}
+
+/* ── DETAIL PANEL ── */
+.detail-panel{background:var(--panel);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;display:none}
+.detail-panel.open{display:grid;grid-template-columns:1fr 340px}
+.detail-left{padding:24px 28px;border-right:1px solid var(--border)}
+.detail-right{padding:24px;overflow-y:auto}
+.detail-product-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.dph-emoji{font-size:32px}
+.dph-name{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:var(--ink);line-height:1}
+.dph-sub{font-size:12px;color:var(--ink3);margin-top:2px}
+.dph-signal{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;padding:4px 14px;border-radius:4px;margin-left:auto;border:1px solid}
+.dph-signal.ANTECIPAR{background:var(--red-bg);color:var(--red);border-color:var(--red-mid)}
+.dph-signal.NORMAL{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-mid)}
+.dph-signal.AGUARDAR{background:var(--green-bg);color:var(--green);border-color:var(--green-mid)}
+
+/* Score breakdown */
+.score-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.sb-item{background:var(--bg);border-radius:6px;padding:10px 12px;border:1px solid var(--border);position:relative}
+.sb-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+.sb-label{font-size:9px;color:var(--ink3);font-weight:600;letter-spacing:.8px;text-transform:uppercase}
+.sb-info{width:16px;height:16px;border-radius:50%;background:var(--bg3);color:var(--ink3);font-size:9px;font-weight:700;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.sb-info:hover{background:var(--ink);color:white}
+.sb-score{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--ink);line-height:1}
+.sb-weight{font-size:9px;color:var(--ink3);margin-top:2px}
+.sb-bar{height:3px;background:var(--bg2);border-radius:2px;margin-top:6px;overflow:hidden}
+.sb-bar-fill{height:100%;border-radius:2px;transition:width .5s}
+
+.chart-label{font-size:10px;color:var(--ink3);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;margin-bottom:6px}
+
+/* Right panel */
+.action-box{border-radius:6px;padding:16px;margin-bottom:16px;border:1px solid}
+.action-box.ANTECIPAR{background:var(--red-bg);border-color:var(--red-mid)}
+.action-box.NORMAL{background:var(--amber-bg);border-color:var(--amber-mid)}
+.action-box.AGUARDAR{background:var(--green-bg);border-color:var(--green-mid)}
+.action-label{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.action-label.ANTECIPAR{color:var(--red)}.action-label.NORMAL{color:var(--amber)}.action-label.AGUARDAR{color:var(--green)}
+.action-text{font-size:13px;font-weight:500;color:var(--ink);line-height:1.55}
+
+.stat-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.sl-row{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--bg);border-radius:5px;border:1px solid var(--border)}
+.sl-label{font-size:11px;color:var(--ink3);font-weight:500}
+.sl-value{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--ink)}
+.sl-value.pos{color:var(--red)}.sl-value.neg{color:var(--green)}
+
+.sazon-mini-label{font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.sazon-bars-mini{display:flex;align-items:flex-end;gap:2px;height:40px}
+.smb-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.smb{width:100%;border-radius:2px 2px 0 0;min-height:1px}
+.smb.pos{background:var(--red);opacity:.55}.smb.neg{background:var(--green);opacity:.55}
+.smb.pos.cur{opacity:1}.smb.neg.cur{opacity:1}
+
+/* ── TOOLTIP (explicações inline) ── */
+.tooltip-box{
+  display:none;position:absolute;z-index:100;
+  background:var(--ink);color:#f0ece4;
+  border-radius:8px;padding:14px 16px;
+  font-size:11px;line-height:1.6;width:260px;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  top:calc(100% + 8px);right:0;
+}
+.tooltip-box.open{display:block;animation:fadeUp .15s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.tooltip-box strong{color:#e8c96e;font-weight:600}
+.tooltip-box .tt-formula{
+  background:rgba(255,255,255,.08);border-radius:5px;
+  padding:7px 10px;margin:8px 0;
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:#a8d8b0;line-height:1.7;
+}
+.tooltip-box .tt-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:10px}
+.tooltip-box .tt-table td{padding:3px 6px;border-bottom:1px solid rgba(255,255,255,.08)}
+.tooltip-box .tt-table td:first-child{color:#aaa}
+.tooltip-box .tt-table td:last-child{color:white;font-family:'JetBrains Mono',monospace;font-weight:500}
+
+/* ── MODAL DE METODOLOGIA ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--panel);border-radius:12px;max-width:780px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-header{background:var(--ink);padding:20px 28px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#e8c96e}
+.modal-close{background:rgba(255,255,255,.1);border:none;color:white;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.modal-close:hover{background:rgba(255,255,255,.2)}
+.modal-body{padding:28px}
+
+/* Modal typography */
+.m-section{margin-bottom:28px}
+.m-section:last-child{margin-bottom:0}
+.m-h2{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.m-h2-num{font-size:11px;background:var(--ink);color:#e8c96e;border-radius:4px;padding:3px 9px;font-family:'JetBrains Mono',monospace;letter-spacing:1px}
+.m-p{font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:10px}
+.m-p strong{color:var(--ink);font-weight:600}
+.m-p em{color:var(--ink3);font-style:italic}
+.m-formula{background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--ink);border-radius:5px;padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink2);line-height:1.8;margin:12px 0}
+.m-formula .cmt{color:var(--ink4)}
+.m-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px}
+.m-table th{text-align:left;padding:8px 12px;background:var(--bg2);color:var(--ink3);font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase}
+.m-table td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink2);vertical-align:top;line-height:1.5}
+.m-table td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+.m-table td .badge{display:inline-block;padding:1px 8px;border-radius:3px;font-size:10px;font-weight:600}
+.badge-red{background:var(--red-bg);color:var(--red)}.badge-amber{background:var(--amber-bg);color:var(--amber)}.badge-green{background:var(--green-bg);color:var(--green)}
+.m-callout{border-radius:7px;padding:14px 16px;margin:12px 0;font-size:12px;line-height:1.6;border:1px solid}
+.m-callout.info{background:var(--blue-bg);border-color:var(--blue-mid);color:var(--blue)}
+.m-callout.warn{background:var(--amber-bg);border-color:var(--amber-mid);color:var(--amber)}
+.m-callout strong{font-weight:600}
+.m-steps{list-style:none;counter-reset:steps;display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.m-steps li{counter-increment:steps;display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--ink2);line-height:1.5}
+.m-steps li::before{content:counter(steps);background:var(--ink);color:#e8c96e;border-radius:50%;width:22px;height:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;margin-top:1px}
+.m-divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+.score-example{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+.se-col{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center}
+.se-produto{font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+.se-score{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--ink)}
+.se-sinal{font-size:10px;font-weight:600;margin-top:4px;padding:2px 6px;border-radius:3px}
+
+/* ── FOOTER ── */
+.footer-bar{background:var(--ink);padding:10px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.footer-note{font-family:'JetBrains Mono',monospace;font-size:9px;color:#555}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){.product-grid{grid-template-columns:repeat(3,1fr)}.detail-panel.open{grid-template-columns:1fr}.score-breakdown{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.product-grid{grid-template-columns:repeat(2,1fr)}.main{padding:16px}header,.footer-bar{padding-left:16px;padding-right:16px}.legend-bar{padding:8px 16px;gap:12px}.leg-note,.btn-metodologia{display:none}}
+
+/* Fonte no card */
+.pcard-fonte {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  padding: 4px 7px;
+  background: var(--bg);
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.pcard-fonte-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ink3);
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.pcard-fonte-data {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--ink4);
+  margin-left: auto;
+}
+.pcard-fonte-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pcard-fonte-dot.ok { background: #10b981; }
+.pcard-fonte-dot.est { background: #d97706; }
+
+
+
+
+/* ── PAINEL SAZONALIDADE (abaixo dos cards) ── */
+.sazon-panel {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.sazon-panel-header {
+  background: var(--ink);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.sazon-panel-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: #e8c96e;
+}
+.sazon-panel-subtitle {
+  font-size: 11px;
+  color: #888;
+  font-family: 'JetBrains Mono', monospace;
+}
+.sazon-panel-body {
+  padding: 20px 24px;
+}
+
+/* Explicação intro */
+.sazon-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.sazon-intro-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.sic-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.sic-titulo {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink2);
+  margin-bottom: 5px;
+  letter-spacing: .3px;
+}
+.sic-texto {
+  font-size: 11px;
+  color: var(--ink3);
+  line-height: 1.55;
+}
+
+/* Grid de produtos */
+.sazon-products {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+.sazon-prod-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.spc-header {
+  padding: 10px 12px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.spc-emoji { font-size: 18px; }
+.spc-nome {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink2);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* Destaque do mês atual */
+.spc-mes-atual {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.spc-mes-atual.up   { background: var(--red-lt); }
+.spc-mes-atual.down { background: var(--green-lt); }
+.spc-mes-atual.flat { background: var(--bg); }
+.spc-icon { font-size: 18px; flex-shrink: 0; }
+.spc-mes-info {}
+.spc-mes-nome {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--ink3);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+.spc-mes-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 2px 0;
+}
+.spc-mes-pct.up   { color: var(--red); }
+.spc-mes-pct.down { color: var(--green); }
+.spc-mes-pct.flat { color: var(--ink3); }
+.spc-mes-texto {
+  font-size: 10px;
+  color: var(--ink2);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* Mini barras 12 meses */
+.spc-barras {
+  padding: 8px 12px 4px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.spc-barras-label {
+  font-size: 8px;
+  color: var(--ink4);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.spc-barras-grid {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 36px;
+}
+.spc-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 36px;
+  gap: 2px;
+}
+.spc-bar {
+  width: 100%;
+  border-radius: 2px 2px 0 0;
+  min-height: 1px;
+  transition: opacity .2s;
+}
+.spc-bar.up   { background: var(--red); }
+.spc-bar.down { background: var(--green); }
+.spc-bar.up.cur, .spc-bar.down.cur {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+  opacity: 1 !important;
+}
+.spc-bar-lbl {
+  font-size: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--ink4);
+  line-height: 1;
+}
+.spc-bar-lbl.cur {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* Tabela de meses — melhor/pior */
+.spc-extremos {
+  padding: 8px 12px 10px;
+  display: flex;
+  gap: 8px;
+}
+.spc-ext-item {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 6px 8px;
+  text-align: center;
+}
+.spc-ext-label {
+  font-size: 8px;
+  color: var(--ink4);
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+.spc-ext-mes {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.spc-ext-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+.spc-ext-val.up   { color: var(--red); }
+.spc-ext-val.down { color: var(--green); }
+
+/* Aviso metodológico */
+.sazon-aviso {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-mid);
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--amber);
+  line-height: 1.55;
+}
+.sazon-aviso strong { font-weight: 700; }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="logo">
+    <span class="logo-mark">Meridian</span>
+    <span class="logo-divider">|</span>
+    <span class="logo-sub">Painel de Compras</span>
+  </div>
+  <div class="header-right">
+    <div class="ptax-chip">PTAX <span id="ptax-val">—</span></div>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span id="update-time">Carregando...</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── LEGEND ── -->
+<div class="legend-bar">
+  <div class="leg-item"><div class="leg-dot red"></div>ANTECIPAR — preço tende a subir</div>
+  <span class="leg-sep">·</span>
+  <div class="leg-item"><div class="leg-dot amber"></div>RITMO NORMAL — sem urgência</div>
+  <span class="leg-sep">·</span>
+  <div class="leg-item"><div class="leg-dot green"></div>AGUARDAR — preço tende a cair</div>
+  <div class="leg-note">Score = 40% Modelo · 30% Técnico · 20% Sazonalidade · 10% Notícias</div>
+  <button class="btn-metodologia" onclick="openModal()">❓ Como funciona?</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="product-grid" id="product-grid"></div>
+
+  <!-- ── PAINEL SAZONALIDADE ── -->
+  <div class="sazon-panel" id="sazon-panel">
+    <div class="sazon-panel-header">
+      <div>
+        <div class="sazon-panel-title">📅 Sazonalidade Histórica</div>
+        <div class="sazon-panel-subtitle">Como o mês atual tende a afetar os preços, com base nos últimos 5 anos</div>
+      </div>
+      <span id="sazon-mes-badge" style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.5px;background:rgba(255,255,255,.08);color:#e8c96e;padding:5px 14px;border-radius:4px;border:1px solid rgba(255,255,255,.15)"></span>
+    </div>
+    <div class="sazon-panel-body">
+
+      <!-- Explicação em 3 colunas -->
+      <div class="sazon-intro">
+        <div class="sazon-intro-card">
+          <div class="sic-num">O que é?</div>
+          <div class="sic-titulo">Padrão que se repete todo ano</div>
+          <div class="sic-texto">
+            Sazonalidade é o comportamento de preço que historicamente se repete no mesmo mês, todos os anos — independente de câmbio, clima ou demanda pontual.
+            É calculada como a <strong>mediana</strong> da variação do produto naquele mês, nos últimos 5 anos.
+          </div>
+        </div>
+        <div class="sazon-intro-card">
+          <div class="sic-num">Como usar?</div>
+          <div class="sic-titulo">Um dos quatro sinais do score</div>
+          <div class="sic-texto">
+            O efeito sazonal do mês atual representa <strong>20% do score final</strong> do painel.
+            Um mês historicamente de alta contribui com mais pontos; um mês de baixa, com menos.
+            Os outros 80% vêm do modelo, da análise técnica e das notícias.
+          </div>
+        </div>
+        <div class="sazon-intro-card">
+          <div class="sic-num">Atenção</div>
+          <div class="sic-titulo">Histórico ≠ certeza</div>
+          <div class="sic-texto">
+            A sazonalidade é uma <em>tendência de fundo</em>, não uma garantia.
+            Um câmbio favorável, uma geada ou uma safra recorde podem facilmente sobrepor o padrão histórico.
+            Use como contexto, não como única base de decisão.
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards de produto -->
+      <div class="sazon-products" id="sazon-products"></div>
+
+      <!-- Aviso metodológico -->
+      <div class="sazon-aviso">
+        <span style="font-size:16px;flex-shrink:0">⚠</span>
+        <div>
+          <strong>Metodologia:</strong> cada valor percentual é a mediana da variação diária acumulada do produto naquele mês, calculada sobre os últimos 5 anos de histórico.
+          A <strong>mediana</strong> é usada (e não a média) para eliminar distorções de anos atípicos — como secas severas, pandemias ou choques de câmbio — que poderiam inflacionar ou deflacionar artificialmente o padrão.
+          Meses com poucos dias úteis ou dados ausentes são descartados do cálculo.
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-left" id="detail-left"></div>
+    <div class="detail-right" id="detail-right"></div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="footer-bar">
+  <div class="footer-note">Fontes: CEPEA/ESALQ · BCB · CME Group · Yahoo Finance — Horizonte: 30 dias úteis</div>
+  <div class="footer-note">⚠ Indicativo de tendência — não constitui recomendação de investimento</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL DE METODOLOGIA
+══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+<div class="modal" id="modal">
+  <div class="modal-header">
+    <span class="modal-title">Como funciona este painel?</span>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+  </div>
+  <div class="modal-body">
+
+    <!-- VARIAÇÃO -->
+    <div class="m-section">
+      <div class="m-h2"><span class="m-h2-num">CONCEITO</span> O que é Variação?</div>
+      <p class="m-p">
+        <strong>Variação</strong> é a diferença percentual do preço entre dois momentos no tempo.
+        É a forma mais direta de medir se um produto ficou mais caro ou mais barato.
+      </p>
+      <div class="m-formula">
+        Variação (%) = (preço hoje − preço N dias atrás) ÷ preço N dias atrás × 100
+      </div>
+      <table class="m-table">
+        <thead><tr><th>Indicador</th><th>O que mede</th><th>Exemplo</th></tr></thead>
+        <tbody>
+          <tr><td>Variação 7d</td><td>Movimento da última semana</td><td>Frango variou +0,4% na semana</td></tr>
+          <tr><td>Variação 30d</td><td>Tendência do último mês</td><td>Suíno variou −25% no mês</td></tr>
+          <tr><td>Variação 90d</td><td>Direção do trimestre</td><td>Boi variou +18% no trimestre</td></tr>
+        </tbody>
+      </table>
+      <div class="m-callout info">
+        <strong>Para o comprador:</strong> a variação de 30 dias é a mais relevante para decisão de estoque.
+        Se está positiva (vermelho), o produto ficou mais caro no mês — atenção para antecipar compras.
+        Se está negativa (verde), o produto ficou mais barato — pode aguardar.
+      </div>
+    </div>
+
+    <hr class="m-divider">
+
+    <!-- SAZONALIDADE -->
+    <div class="m-section">
+      <div class="m-h2"><span class="m-h2-num">CONCEITO</span> O que é Sazonalidade?</div>
+      <p class="m-p">
+        Sazonalidade é o <strong>padrão que se repete todo ano no mesmo período</strong>, independente
+        de qualquer outro fator. Ela existe porque proteínas e grãos seguem ciclos naturais e de consumo previsíveis.
+      </p>
+      <p class="m-p">
+        <strong>Como é calculada:</strong> o sistema olha os últimos 5 anos de histórico e pergunta —
+        <em>"em média, o que aconteceu com o preço de milho em abril de 2021, 2022, 2023, 2024 e 2025?"</em>
+      </p>
+      <ol class="m-steps">
+        <li>Pegar o histórico completo (5 anos de dados)</li>
+        <li>Calcular a variação de cada produto em cada mês de cada ano<br><em>ex: milho em abril/2022 variou −3,2% · abril/2023 variou −5,8% · abril/2024 variou −4,1%</em></li>
+        <li>Tirar a <strong>mediana</strong> desses valores por mês — ela ignora anos atípicos (secas, pandemias) que distorceriam a média</li>
+        <li>Esse valor é a sazonalidade do mês para aquele produto</li>
+      </ol>
+      <table class="m-table">
+        <thead><tr><th>Produto</th><th>Meses de Alta</th><th>Meses de Baixa</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td>🌽 Milho</td><td>Jan – Mar</td><td>Abr – Out</td><td>Entressafra pressiona. Colheita (abr–jun) derruba</td></tr>
+          <tr><td>🫘 Soja</td><td>Nov – Jan</td><td>Mai – Jul</td><td>Especulação pré-safra sobe. Colheita derruba</td></tr>
+          <tr><td>🐔 Frango</td><td>Nov – Fev</td><td>Jun – Ago</td><td>Festas elevam demanda. Inverno esfria consumo</td></tr>
+          <tr><td>🐷 Suíno</td><td>Dez</td><td>Jun – Set</td><td>Demanda sazonal do verão. Dezembro aquece</td></tr>
+          <tr><td>🐄 Boi Gordo</td><td>Jan – Mar</td><td>Jun – Jul</td><td>Pastagem seca reduz oferta. Inverno reduz consumo</td></tr>
+        </tbody>
+      </table>
+      <div class="m-callout warn">
+        <strong>Atenção:</strong> sazonalidade é uma tendência histórica, não uma certeza.
+        Ela vale apenas <strong>20% do score final</strong> justamente porque outros fatores —
+        câmbio, clima, exportações — podem sobrepor o padrão sazonal.
+      </div>
+    </div>
+
+    <hr class="m-divider">
+
+    <!-- SCORE COMPOSTO -->
+    <div class="m-section">
+      <div class="m-h2"><span class="m-h2-num">METODOLOGIA</span> Score Composto — como o sinal é calculado</div>
+      <p class="m-p">
+        O painel usa <strong>um único score de 0 a 100</strong> que unifica quatro fontes de informação,
+        cada uma com um peso diferente. Isso elimina o conflito entre sinais contraditórios.
+      </p>
+      <div class="m-formula">
+        Score = Modelo IA × <strong>40%</strong>  +  Técnico × <strong>30%</strong>  +  Sazonalidade × <strong>20%</strong>  +  Notícias × <strong>10%</strong>
+        <br><br>
+        <span class="cmt">Score ≥ 62 → ANTECIPAR COMPRA</span>
+        <br>
+        <span class="cmt">Score 38–62 → RITMO NORMAL</span>
+        <br>
+        <span class="cmt">Score ≤ 38 → AGUARDAR</span>
+      </div>
+      <p class="m-p"><em>
+        Os limiares 38 e 62 criam uma zona neutra ampla ao redor de 50, evitando sinais falsos.
+        O painel só emite ANTECIPAR ou AGUARDAR quando a evidência converge em múltiplas frentes.
+      </em></p>
+    </div>
+
+    <hr class="m-divider">
+
+    <!-- MODELO IA -->
+    <div class="m-section">
+      <div class="m-h2"><span class="m-h2-num">COMPONENTE 1 — 40%</span> Modelo de Inteligência Artificial</div>
+      <p class="m-p">
+        Dois algoritmos de machine learning treinados com 5 anos de dados históricos reais:
+        <strong>XGBoost</strong> e <strong>LightGBM</strong> — ambos do tipo <em>gradient boosting</em>,
+        que constroem centenas de árvores de decisão em sequência, onde cada árvore corrige os erros da anterior.
+      </p>
+      <p class="m-p"><strong>O que o modelo aprende:</strong></p>
+      <ul style="font-size:13px;color:var(--ink2);line-height:1.7;padding-left:20px;margin-bottom:10px">
+        <li>Quando o dólar sobe X% e o CBOT sobe Y%, o milho físico tende a subir Z% nas próximas 6 semanas?</li>
+        <li>Quando o boi está acima da média de 60 dias e o câmbio cai, qual a probabilidade de alta?</li>
+        <li>Quais combinações de variáveis precederam altas e baixas históricas?</li>
+      </ul>
+      <p class="m-p"><strong>Validação — Walk-Forward Backtesting:</strong></p>
+      <div class="m-formula">
+        <span class="cmt">O modelo nunca viu o futuro durante o treinamento:</span>
+        <br>
+        │── Treino (2 anos) ──│── Teste (1 mês) ──│
+        <br>
+        │────── Treino (2 anos + 1 mês) ──│── Teste ──│
+        <br>
+        │─────────── ... ──────────│── Teste ──│
+        <br><br>
+        <span class="cmt">6 a 12 rodadas de validação por produto</span>
+        <br>
+        <span class="cmt">Baseline aleatório: 33%  ·  Nossos modelos: 43%–59%</span>
+      </div>
+      <p class="m-p">
+        O modelo retorna três probabilidades que somam 100%: probabilidade de queda, lateral e alta.
+        A <strong>probabilidade de alta × 100</strong> vira a pontuação deste componente (0 a 100).
+      </p>
+    </div>
+
+    <hr class="m-divider">
+
+    <!-- TÉCNICO -->
+    <div class="m-section">
+      <div class="m-h2"><span class="m-h2-num">COMPONENTE 2 — 30%</span> Análise Técnica</div>
+      <p class="m-p">
+        Avalia a posição do preço atual em relação às suas próprias médias históricas.
+        A <strong>Média Móvel</strong> é simplesmente a média do preço dos últimos N dias —
+        quando o preço atual está acima, há momentum de alta; abaixo, de baixa.
+      </p>
+      <p class="m-p"><strong>5 condições avaliadas, cada uma vale +1 (bullish) ou −1 (bearish):</strong></p>
+      <div class="m-formula">
+        1. Preço atual > Média dos últimos 20 dias?   → +1 ou −1
+        <br>
+        2. Preço atual > Média dos últimos 60 dias?   → +1 ou −1
+        <br>
+        3. Preço atual > Média dos últimos 120 dias?  → +1 ou −1
+        <br>
+        4. Variação 30 dias > 0%?                     → +1 ou −1
+        <br>
+        5. Variação 90 dias > 0%?                     → +1 ou −1
+        <br><br>
+        <span class="cmt">Score técnico: −5 a +5</span>
+        <br>
+        <span class="cmt">Normalizado: (score + 5) ÷ 10 × 100  →  0 a 100</span>
+      </div>
+    </div>
+
+    <hr class="m-divider">
+
+    <!-- SAZON COMPONENTE -->
+    <div class="m-section">
+      <div class="m-h2"><span class="m-h2-num">COMPONENTE 3 — 20%</span> Sazonalidade do Mês Atual</div>
+      <p class="m-p">
+        O valor sazonal do mês atual (calculado conforme explicado acima) é convertido em pontuação:
+      </p>
+      <div class="m-formula">
+        Pontuação = (variação_sazonal_do_mês + 8%) ÷ 16% × 100
+        <br><br>
+        <span class="cmt">Mês com sazonalidade −8% →  0 pontos  (historicamente muito ruim)</span>
+        <br>
+        <span class="cmt">Mês com sazonalidade  0% → 50 pontos  (neutro)</span>
+        <br>
+        <span class="cmt">Mês com sazonalidade +8% → 100 pontos (historicamente muito bom)</span>
+      </div>
+    </div>
+
+    <hr class="m-divider">
+
+    <!-- NOTÍCIAS -->
+    <div class="m-section">
+      <div class="m-h2"><span class="m-h2-num">COMPONENTE 4 — 10%</span> Score de Notícias</div>
+      <p class="m-p">
+        O único componente subjetivo — e intencionalmente o de <strong>menor peso (10%)</strong>.
+        É inserido manualmente por você com base no contexto de mercado do dia.
+      </p>
+      <table class="m-table">
+        <thead><tr><th>Score</th><th>Interpretação</th><th>Exemplos</th></tr></thead>
+        <tbody>
+          <tr><td>1 – 3</td><td>Notícias negativas para preço</td><td>Superprodução, embargo, queda de demanda, clima favorável à safra</td></tr>
+          <tr><td>4 – 6</td><td>Notícias neutras ou mistas</td><td>Sem novidades relevantes, mercado lateral</td></tr>
+          <tr><td>7 – 10</td><td>Notícias positivas para preço</td><td>Seca em regiões produtoras, demanda aquecida, exportação forte, conflitos geopolíticos</td></tr>
+        </tbody>
+      </table>
+      <div class="m-callout warn">
+        <strong>Por que apenas 10%?</strong> Notícias são o dado mais subjetivo e sujeito a vieses de interpretação.
+        Os outros três componentes são quantitativos e auditáveis. O peso reduzido permite que uma notícia relevante
+        mova levemente o sinal sem que ela domine a decisão.
+      </div>
+    </div>
+
+    <hr class="m-divider">
+
+    <!-- EXEMPLO REAL -->
+    <div class="m-section">
+      <div class="m-h2"><span class="m-h2-num">EXEMPLO</span> Score atual com notícias neutras (5/10)</div>
+      <div class="score-example" id="modal-score-example"></div>
+      <p class="m-p" style="margin-top:12px">
+        <em>Perceba que todos os componentes apontam na mesma direção para Boi Gordo e Suíno —
+        não há conflito. Para Frango, os sinais divergem e o sistema responde NORMAL,
+        sem forçar uma decisão que a evidência não sustenta.</em>
+      </p>
+    </div>
+
+  </div><!-- /modal-body -->
+</div><!-- /modal -->
+</div><!-- /modal-overlay -->
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  DADOS
+// ══════════════════════════════════════════════════════════
+const RAW = {"data_base":"22/04/2026","hora_coleta":"01:22","stats":{"milho_esalq_brl_saca":{"nome":"Milho ESALQ","emoji":"🌽","unidade":"R$/saca","fonte_label":"CEPEA/ESALQ","fonte_desc":"Ind. Milho ESALQ/BM&F · Campinas SP","data_ref":"22/04/2026","last":69.14,"var7":-2.4,"var30":-3.4,"var90":-3.3,"mm20":71.53,"mm60":71.79,"vol30":43.6,"score":-5,"sinal":"BAIXA","probs":[80.0,15.0,5.0],"acc":null,"f1":null,"sazon":[4.5,3.2,0.5,-5.2,-6.1,-4.8,-2.3,-1.1,1.8,3.4,4.1,5.0],"min":67.86,"max":75.29,"hist":[73.29,71.4,72.16,70.65,74.27,71.87,71.38,72.17,71.37,69.35,70.83,72.64,71.49,71.54,70.0,72.36,72.55,70.7,74.1,72.14,74.09,69.97,70.78,73.07,71.24,69.14],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"soja_esalq_brl_saca":{"nome":"Soja ESALQ","emoji":"🫘","unidade":"R$/saca","fonte_label":"CEPEA/ESALQ","fonte_desc":"Ind. Soja CEPEA/ESALQ · Paranaguá PR","data_ref":"22/04/2026","last":125.95,"var7":2.0,"var30":2.6,"var90":0.7,"mm20":125.55,"mm60":125.14,"vol30":32.3,"score":5,"sinal":"ALTA","probs":[5.0,15.0,80.0],"acc":null,"f1":null,"sazon":[1.8,6.2,-0.1,0.2,-1.7,-4.7,-2.4,0.1,3.0,2.6,3.5,5.5],"min":119.21,"max":130.16,"hist":[123.04,122.33,124.96,124.14,123.6,123.61,123.65,125.62,125.09,122.26,128.36,124.59,125.07,126.67,128.35,125.15,124.78,126.22,129.64,124.7,121.33,129.99,126.84,126.98,125.06,125.95],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"frango_brl_kg":{"nome":"Frango","emoji":"🐔","unidade":"R$/kg","fonte_label":"CEPEA","fonte_desc":"Frango congelado atacado paulista · CEPEA SP","data_ref":"22/04/2026","last":7.03,"var7":-1.6,"var30":-1.9,"var90":0.3,"mm20":6.98,"mm60":6.98,"vol30":26.7,"score":1,"sinal":"LATERAL","probs":[20.0,45.0,35.0],"acc":null,"f1":null,"sazon":[0.5,3.5,1.7,1.3,0.2,-2.3,-4.2,-2.9,0.2,0.2,2.4,2.3],"min":6.71,"max":7.32,"hist":[7.11,6.99,7.05,7.11,6.98,6.84,6.99,7.02,6.73,7.14,7.16,6.92,7.0,6.87,6.86,6.85,6.81,6.92,7.19,6.84,6.95,6.91,6.99,7.04,7.07,7.03],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"suino_brl_kg":{"nome":"Suíno","emoji":"🐷","unidade":"R$/kg","fonte_label":"CEPEA","fonte_desc":"Suíno vivo SP · CEPEA","data_ref":"22/04/2026","last":5.68,"var7":-5.1,"var30":1.9,"var90":-1.9,"mm20":5.68,"mm60":5.68,"vol30":67.1,"score":1,"sinal":"LATERAL","probs":[20.0,45.0,35.0],"acc":null,"f1":null,"sazon":[0.3,-0.7,-0.2,0.6,-1.5,-0.7,-1.6,-0.8,-1.5,0.8,0.1,3.1],"min":5.1,"max":6.33,"hist":[5.83,5.89,5.57,5.8,5.94,5.52,5.54,5.54,5.55,5.3,5.97,5.95,5.8,5.6,5.6,5.7,5.57,5.87,5.78,5.67,5.72,5.94,5.41,5.67,5.82,5.68],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"boi_cepea_brl_arroba":{"nome":"Boi Gordo","emoji":"🐄","unidade":"R$/@","fonte_label":"CEPEA/B3","fonte_desc":"Ind. Boi Gordo CEPEA/B3 · à vista SP","data_ref":"22/04/2026","last":367.0,"var7":-0.8,"var30":-0.9,"var90":-1.1,"mm20":370.19,"mm60":370.58,"vol30":17.3,"score":-5,"sinal":"BAIXA","probs":[80.0,15.0,5.0],"acc":null,"f1":null,"sazon":[2.1,0.2,1.3,0.6,-0.5,-3.8,1.7,-1.1,-2.2,0.2,0.7,1.2],"min":362.1,"max":378.69,"hist":[374.56,378.69,374.71,368.22,367.18,370.85,368.11,369.59,366.18,371.36,373.91,370.79,371.07,365.14,367.7,367.89,369.32,370.35,367.26,369.42,373.12,368.3,375.33,373.48,366.07,367.0],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]},"ptax_venda":{"nome":"PTAX","emoji":"💵","unidade":"R$/USD","fonte_label":"BCB PTAX","fonte_desc":"PTAX fechamento · Banco Central do Brasil","data_ref":"22/04/2026","last":4.98,"var7":0.4,"var30":0.7,"var90":-0.1,"mm20":4.99,"mm60":4.99,"vol30":25.1,"score":-1,"sinal":"LATERAL","probs":[35.0,45.0,20.0],"acc":null,"f1":null,"sazon":[0.2,0.9,2.2,0.6,-3.0,0.7,1.0,1.5,2.8,2.7,-0.4,3.2],"min":4.85,"max":5.18,"hist":[5.02,4.99,5.01,4.99,4.92,4.94,4.97,5.0,4.97,5.01,4.94,4.92,4.99,5.04,5.01,5.02,4.96,4.9,4.95,4.95,4.95,5.03,5.07,5.03,5.01,4.98],"dates":["02/11/25","09/11/25","16/11/25","23/11/25","30/11/25","07/12/25","14/12/25","21/12/25","28/12/25","04/01/26","11/01/26","18/01/26","25/01/26","01/02/26","08/02/26","15/02/26","22/02/26","01/03/26","08/03/26","15/03/26","22/03/26","29/03/26","05/04/26","12/04/26","19/04/26","26/04/26"]}}};
+
+// ══════════════════════════════════════════════════════════
+//  TOOLTIPS (explicações inline nos componentes)
+// ══════════════════════════════════════════════════════════
+const TOOLTIPS = {
+  modelo: {
+    title: 'Modelo IA — Peso 40%',
+    html: `<strong>O que é:</strong> dois algoritmos de machine learning (XGBoost + LightGBM) treinados com 5 anos de dados históricos.<br><br>
+<strong>O que aprende:</strong> combinações de câmbio, CBOT, médias móveis e sazonalidade que precederam altas e baixas nos últimos 5 anos.<br><br>
+<div class="tt-formula">Pontuação = probabilidade de alta × 100</div>
+<strong>Precisão:</strong> os modelos acertam 43%–59% das direções — consistentemente acima dos 33% do acaso em 3 classes.`
+  },
+  tecnico: {
+    title: 'Análise Técnica — Peso 30%',
+    html: `<strong>O que é:</strong> avalia se o preço está em momentum de alta ou baixa comparado com suas próprias médias históricas.<br><br>
+<div class="tt-formula">+1 se preço > média 20 dias<br>+1 se preço > média 60 dias<br>+1 se preço > média 120 dias<br>+1 se variação 30d > 0%<br>+1 se variação 90d > 0%<br>────────<br>Score: −5 a +5 → normalizado 0–100</div>
+<strong>Para o comprador:</strong> responde se o preço está em tendência de alta ou baixa <em>comparado com ele mesmo.</em>`
+  },
+  sazon: {
+    title: 'Sazonalidade — Peso 20%',
+    html: `<strong>O que é:</strong> o padrão que se repete todo ano no mesmo mês, baseado na mediana dos últimos 5 anos.<br><br>
+<div class="tt-formula">(variação_sazonal + 8%) ÷ 16% × 100<br>−8% → 0pts · 0% → 50pts · +8% → 100pts</div>
+<strong>Atenção:</strong> sazonalidade é histórica, não garante o futuro. Vale apenas 20% do score justamente por isso.<br><br>
+<table class="tt-table"><tr><td>🌽 Milho alta</td><td>Jan–Mar</td></tr><tr><td>🐄 Boi alta</td><td>Jan–Mar</td></tr><tr><td>🐔 Frango alta</td><td>Nov–Fev</td></tr><tr><td>🫘 Soja alta</td><td>Nov–Jan</td></tr></table>`
+  },
+  noticias: {
+    title: 'Notícias — Peso 10%',
+    html: `<strong>O que é:</strong> o único componente subjetivo — inserido manualmente por você com base no mercado do dia.<br><br>
+<div class="tt-formula">Pontuação = score_notícias × 10<br>1 → 10pts · 5 → 50pts · 10 → 100pts</div>
+<table class="tt-table"><tr><td>1–3</td><td>Notícias negativas: superprodução, embargo, clima favorável à safra</td></tr><tr><td>4–6</td><td>Neutras ou mistas</td></tr><tr><td>7–10</td><td>Positivas: seca, demanda forte, conflitos, exportação aquecida</td></tr></table><br>
+<strong>Por que 10%?</strong> Notícias são subjetivas. O peso reduzido evita que um viés de interpretação domine a decisão.`
+  }
+};
+
+let openTooltip = null;
+
+function toggleTooltip(compId, btnEl) {
+  // Fechar se já está aberto
+  if (openTooltip === compId) {
+    document.querySelectorAll('.tooltip-box').forEach(t => t.classList.remove('open'));
+    openTooltip = null;
+    return;
+  }
+  // Fechar qualquer outro
+  document.querySelectorAll('.tooltip-box').forEach(t => t.classList.remove('open'));
+  // Abrir o novo
+  const tt = document.getElementById('tt-' + compId);
+  if (tt) { tt.classList.add('open'); openTooltip = compId; }
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.sb-item')) {
+    document.querySelectorAll('.tooltip-box').forEach(t => t.classList.remove('open'));
+    openTooltip = null;
+  }
+});
+
+// ══════════════════════════════════════════════════════════
+//  MODAL
+// ══════════════════════════════════════════════════════════
+function openModal() {
+  buildModalExample();
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) { if (e.target === e.currentTarget) closeModal(); }
+
+function buildModalExample() {
+  const cols = ['boi_cepea_brl_arroba','milho_esalq_brl_saca','frango_brl_kg','suino_brl_kg','soja_esalq_brl_saca'];
+  const el = document.getElementById('modal-score-example');
+  if (!el) return;
+  el.innerHTML = cols.map(col => {
+    const s = RAW.stats[col];
+    const {comp, sinal} = calcScore(col, 5);
+    const cls = sinal === 'ANTECIPAR' ? 'red' : sinal === 'AGUARDAR' ? 'green' : 'amber';
+    return `<div class="se-col">
+      <div class="se-produto">${s.emoji} ${s.nome}</div>
+      <div class="se-score">${comp}</div>
+      <div class="se-sinal badge-${cls}">${sinal}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+//  SCORE ENGINE
+// ══════════════════════════════════════════════════════════
+function calcScore(col, newsVal) {
+  const s = RAW.stats[col];
+  const p = s.probs;
+  const mod = p[2];
+  const tec = Math.round((s.score + 5) / 10 * 100);
+  const cm  = new Date().getMonth();
+  const sv  = s.sazon[cm];
+  const saz = Math.min(100, Math.max(0, Math.round((sv + 8) / 16 * 100)));
+  const not = newsVal * 10;
+  const comp = mod * 0.40 + tec * 0.30 + saz * 0.20 + not * 0.10;
+  const sinal = comp >= 62 ? 'ANTECIPAR' : comp <= 38 ? 'AGUARDAR' : 'NORMAL';
+  return { comp: Math.round(comp), mod, tec, saz, not, sinal };
+}
+
+// ══════════════════════════════════════════════════════════
+//  NEWS (localStorage)
+// ══════════════════════════════════════════════════════════
+function getNews(col) { const v = localStorage.getItem('news_' + col); return v !== null ? parseInt(v) : 5; }
+function setNews(col, val) { localStorage.setItem('news_' + col, val); }
+
+const ACOES = {
+  ANTECIPAR: 'Antecipe seus pedidos — alta de preço esperada nas próximas semanas. Considere elevar o estoque acima do habitual.',
+  NORMAL:    'Mantenha o ritmo habitual de compras. Nenhuma urgência para antecipar ou postergar pedidos.',
+  AGUARDAR:  'Postergue pedidos se possível — tendência de queda de preço nas próximas semanas. Reduza o estoque antecipado.'
+};
+const MESES    = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+const MESES_F  = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+let activeCol = null;
+
+// ══════════════════════════════════════════════════════════
+//  FORMAT
+// ══════════════════════════════════════════════════════════
+function fmtP(v, col) {
+  if (v === null || v === undefined) return '—';
+  if (['frango_brl_kg','suino_brl_kg','ptax_venda'].includes(col)) return v.toFixed(2);
+  return v >= 100 ? v.toFixed(0) : v.toFixed(2);
+}
+
+// ══════════════════════════════════════════════════════════
+//  BUILD GRID
+// ══════════════════════════════════════════════════════════
+
+function buildGrid() {
+  const grid = document.getElementById('product-grid');
+  grid.innerHTML = '';
+  const cols = Object.keys(RAW.stats).filter(c => c !== 'ptax_venda');
+  cols.forEach(col => {
+    const s = RAW.stats[col];
+    const news = getNews(col);
+    const { comp, sinal } = calcScore(col, news);
+    const vc = s.var30 > 0.5 ? 'pos' : s.var30 < -0.5 ? 'neg' : 'flat';
+    const vs = s.var30 > 0 ? '+' : '';
+    const pv = Math.round((s.last - s.min) / (s.max - s.min) * 100);
+    const card = document.createElement('div');
+    card.className = `pcard ${sinal}${col === activeCol ? ' active' : ''}`;
+    card.dataset.col = col;
+    card.innerHTML = `
+      <div class="pcard-accent"></div>
+      <div class="pcard-body">
+        <div class="pcard-header">
+          <div class="pcard-name">${s.nome}</div>
+          <div class="pcard-emoji">${s.emoji}</div>
+        </div>
+        <div class="pcard-signal">${sinal}</div>
+        <div class="score-gauge-wrap">
+          <div class="score-gauge-track"><div class="score-gauge-fill" style="width:${comp}%"></div></div>
+          <div class="score-num">Score ${comp}/100</div>
+        </div>
+        <div class="pcard-price-row">
+          <div class="pcard-price">${fmtP(s.last, col)}</div>
+          <div class="pcard-unit">${s.unidade}</div>
+          <div class="pcard-var ${vc}">${vs}${s.var30}%<br><span style="font-size:8px;font-weight:400">30 dias</span></div>
+        </div>
+        <div class="pos-bar-wrap">
+          <div class="pos-bar-label"><span>Mín ${fmtP(s.min, col)}</span><span>Máx ${fmtP(s.max, col)}</span></div>
+          <div class="pos-bar-track"><div class="pos-bar-marker" style="left:${pv}%"></div></div>
+        </div>
+        <canvas class="mini-spark" data-col="${col}" height="36"></canvas>
+        <div class="pcard-fonte">
+          <div class="pcard-fonte-dot ok"></div>
+          <span class="pcard-fonte-badge">${s.fonte_label}</span>
+          <span class="pcard-fonte-data">${s.data_ref}</span>
+        </div>
+        <div class="news-row">
+          <div class="news-label">Notícias</div>
+          <input type="range" class="news-slider" data-col="${col}" min="1" max="10" value="${news}"
+            style="background:linear-gradient(to right,#1a7a45 0%,#d97706 50%,#c0392b 100%)"
+            oninput="onNews('${col}', this.value)">
+          <div class="news-val" id="nv-${col}">${news}</div>
+        </div>
+      </div>`;
+    card.onclick = e => { if (e.target.classList.contains('news-slider')) return; selectCard(col); };
+    grid.appendChild(card);
+  });
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.mini-spark').forEach(c => drawSpark(c, c.dataset.col));
+  });
+}
+
+function onNews(col, val) {
+  val = parseInt(val);
+  setNews(col, val);
+  document.getElementById('nv-' + col).textContent = val;
+  refreshCard(col);
+  if (activeCol === col) renderDetail(col);
+}
+
+function refreshCard(col) {
+  const news = getNews(col);
+  const { comp, sinal } = calcScore(col, news);
+  const card = document.querySelector(`.pcard[data-col="${col}"]`);
+  if (!card) return;
+  card.className = `pcard ${sinal}${activeCol === col ? ' active' : ''}`;
+  card.querySelector('.pcard-signal').textContent = sinal;
+  card.querySelector('.score-gauge-fill').style.width = comp + '%';
+  card.querySelector('.score-num').textContent = 'Score ' + comp + '/100';
+}
+
+function selectCard(col) {
+  if (activeCol === col) {
+    activeCol = null;
+    document.querySelectorAll('.pcard').forEach(c => c.classList.remove('active'));
+    document.getElementById('detail-panel').className = 'detail-panel';
+    return;
+  }
+  activeCol = col;
+  document.querySelectorAll('.pcard').forEach(c => c.classList.toggle('active', c.dataset.col === col));
+  document.getElementById('detail-panel').className = 'detail-panel open';
+  document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  renderDetail(col);
+}
+
+// ══════════════════════════════════════════════════════════
+//  RENDER DETAIL
+// ══════════════════════════════════════════════════════════
+function renderDetail(col) {
+  const s = RAW.stats[col];
+  const news = getNews(col);
+  const { comp, mod, tec, saz, not, sinal } = calcScore(col, news);
+  const cm = new Date().getMonth();
+
+  function sbColor(v) { return v >= 65 ? 'var(--red)' : v >= 40 ? '#d97706' : 'var(--green)'; }
+
+  function sbItem(id, label, pts, weight) {
+    const tt = TOOLTIPS[id];
+    return `<div class="sb-item" style="position:relative">
+      <div class="sb-header">
+        <div class="sb-label">${label}</div>
+        <button class="sb-info" onclick="toggleTooltip('${id}',this)" title="Saiba mais">?</button>
+      </div>
+      <div class="sb-score">${Math.round(pts)}</div>
+      <div class="sb-weight">peso ${weight}</div>
+      <div class="sb-bar"><div class="sb-bar-fill" style="width:${pts}%;background:${sbColor(pts)}"></div></div>
+      <div class="tooltip-box" id="tt-${id}">
+        <div style="font-weight:700;color:#e8c96e;margin-bottom:8px;font-size:11px">${tt.title}</div>
+        ${tt.html}
+      </div>
+    </div>`;
+  }
+
+  const mm20p = ((s.last / s.mm20 - 1) * 100).toFixed(1);
+  const mm60p = ((s.last / s.mm60 - 1) * 100).toFixed(1);
+  const szAtual = s.sazon[cm];
+
+  document.getElementById('detail-left').innerHTML = `
+    <div class="detail-product-header">
+      <div class="dph-emoji">${s.emoji}</div>
+      <div>
+        <div class="dph-name">${s.nome}</div>
+        <div class="dph-sub">${s.unidade} · Volatilidade ${s.vol30}% ao ano</div>
+      </div>
+      <div class="dph-signal ${sinal}">${sinal}</div>
+    </div>
+    <div class="score-breakdown">
+      ${sbItem('modelo','Modelo IA', mod, '40%')}
+      ${sbItem('tecnico','Técnico', tec, '30%')}
+      ${sbItem('sazon','Sazonalidade', saz, '20%')}
+      ${sbItem('noticias','Notícias', not, '10%')}
+    </div>
+    <div class="chart-label">Histórico de preço — 26 semanas · linha tracejada = média 12 semanas</div>
+    <canvas id="det-chart" height="155"></canvas>`;
+
+  document.getElementById('detail-right').innerHTML = `
+    <div class="action-box ${sinal}">
+      <div class="action-label ${sinal}">Recomendação de Compra</div>
+      <div class="action-text">${ACOES[sinal]}</div>
+    </div>
+    <div class="stat-list">
+      <div class="sl-row">
+        <div class="sl-label">Preço atual</div>
+        <div class="sl-value">${fmtP(s.last, col)} ${s.unidade}</div>
+      </div>
+      <div class="sl-row">
+        <div class="sl-label">Variação 7 dias</div>
+        <div class="sl-value ${s.var7 > 0 ? 'pos' : s.var7 < 0 ? 'neg' : ''}">${s.var7 > 0 ? '+' : ''}${s.var7}%</div>
+      </div>
+      <div class="sl-row">
+        <div class="sl-label">Variação 30 dias</div>
+        <div class="sl-value ${s.var30 > 0 ? 'pos' : s.var30 < 0 ? 'neg' : ''}">${s.var30 > 0 ? '+' : ''}${s.var30}%</div>
+      </div>
+      <div class="sl-row">
+        <div class="sl-label">Variação 90 dias</div>
+        <div class="sl-value ${s.var90 > 0 ? 'pos' : s.var90 < 0 ? 'neg' : ''}">${s.var90 > 0 ? '+' : ''}${s.var90}%</div>
+      </div>
+      <div class="sl-row">
+        <div class="sl-label">vs Média 20 dias</div>
+        <div class="sl-value ${parseFloat(mm20p) > 0 ? 'pos' : 'neg'}">${parseFloat(mm20p) > 0 ? '+' : ''}${mm20p}%</div>
+      </div>
+      <div class="sl-row">
+        <div class="sl-label">vs Média 60 dias</div>
+        <div class="sl-value ${parseFloat(mm60p) > 0 ? 'pos' : 'neg'}">${parseFloat(mm60p) > 0 ? '+' : ''}${mm60p}%</div>
+      </div>
+      <div class="sl-row">
+        <div class="sl-label">Sazonalidade de ${MESES_F[cm]}</div>
+        <div class="sl-value ${szAtual > 0 ? 'pos' : szAtual < 0 ? 'neg' : ''}">${szAtual > 0 ? '+' : ''}${szAtual}% hist.</div>
+      </div>
+      <div class="sl-row">
+        <div class="sl-label">Score notícias</div>
+        <div class="sl-value">${news}/10</div>
+      </div>
+      ${s.acc ? `<div class="sl-row"><div class="sl-label">Precisão modelo</div><div class="sl-value">${s.acc.toFixed(0)}%</div></div>` : ''}
+      <div class="sl-row" style="background:var(--bg2)">
+        <div class="sl-label" style="display:flex;align-items:center;gap:5px">
+          <div style="width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0"></div>
+          Fonte dos dados
+        </div>
+        <div class="sl-value" style="font-size:10px;color:var(--ink3);font-weight:500">${s.fonte_label}</div>
+      </div>
+      <div class="sl-row">
+        <div class="sl-label">Referência</div>
+        <div class="sl-value" style="font-size:10px;color:var(--ink3);font-weight:400">${s.fonte_desc}</div>
+      </div>
+      <div class="sl-row">
+        <div class="sl-label">Data da leitura</div>
+        <div class="sl-value" style="font-size:10px;color:var(--ink3);font-weight:400">${s.data_ref}</div>
+      </div>
+    </div>
+    <div>
+      <div class="sazon-mini-label">
+        Sazonalidade histórica
+        <span style="font-size:9px;color:var(--ink4);font-style:italic">variação mediana por mês</span>
+      </div>
+      <div class="sazon-bars-mini" id="sz-bars"></div>
+      <div style="display:flex;gap:2px;margin-top:3px" id="sz-lbls"></div>
+    </div>`;
+
+  requestAnimationFrame(() => {
+    drawDetailChart(col);
+    buildSazonMini(col, cm);
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  CHARTS
+// ══════════════════════════════════════════════════════════
+function lineColor(sinal) {
+  return sinal === 'ANTECIPAR' ? '#c0392b' : sinal === 'AGUARDAR' ? '#1a7a45' : '#b7600a';
+}
+
+function drawSpark(canvas, col) {
+  const s = RAW.stats[col]; if (!s || !s.hist) return;
+  const { sinal } = calcScore(col, getNews(col));
+  const W = canvas.parentElement.offsetWidth - 32; const H = 36;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const vals = s.hist.slice(-20);
+  const mn = Math.min(...vals) * 0.99; const mx = Math.max(...vals) * 1.01;
+  const xS = i => (i / (vals.length - 1)) * W;
+  const yS = v => H - ((v - mn) / (mx - mn)) * H * 0.88 - H * 0.06;
+  const lc = lineColor(sinal);
+  ctx.clearRect(0, 0, W, H);
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, lc + '28'); g.addColorStop(1, lc + '00');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(xS(0), yS(vals[0]));
+  vals.forEach((v, i) => ctx.lineTo(xS(i), yS(v)));
+  ctx.lineTo(xS(vals.length - 1), H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = lc; ctx.lineWidth = 1.5; ctx.beginPath();
+  vals.forEach((v, i) => i === 0 ? ctx.moveTo(xS(i), yS(v)) : ctx.lineTo(xS(i), yS(v))); ctx.stroke();
+}
+
+function drawDetailChart(col) {
+  const canvas = document.getElementById('det-chart'); if (!canvas) return;
+  const s = RAW.stats[col];
+  const { sinal } = calcScore(col, getNews(col));
+  const W = canvas.parentElement.offsetWidth - 2; const H = 155;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const vals = s.hist; const dates = s.dates || [];
+  const pad = { t: 10, r: 8, b: 22, l: 50 };
+  const iW = W - pad.l - pad.r; const iH = H - pad.t - pad.b;
+  const mn = Math.min(...vals) * 0.995; const mx = Math.max(...vals) * 1.005;
+  const xS = i => pad.l + (i / (vals.length - 1)) * iW;
+  const yS = v => pad.t + iH - ((v - mn) / (mx - mn)) * iH;
+  const lc = lineColor(sinal);
+  ctx.clearRect(0, 0, W, H);
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + (iH / 4) * i;
+    ctx.strokeStyle = '#e8e3da'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    const v = mx - ((mx - mn) / 4) * i;
+    ctx.fillStyle = '#999'; ctx.font = '9px JetBrains Mono'; ctx.textAlign = 'right';
+    ctx.fillText(v >= 100 ? v.toFixed(0) : v.toFixed(2), pad.l - 4, y + 3);
+  }
+  const mm12 = [];
+  for (let i = 0; i < vals.length; i++) {
+    const sl = vals.slice(Math.max(0, i - 11), i + 1);
+    mm12.push(sl.reduce((a, b) => a + b) / sl.length);
+  }
+  ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); mm12.forEach((v, i) => i === 0 ? ctx.moveTo(xS(i), yS(v)) : ctx.lineTo(xS(i), yS(v))); ctx.stroke();
+  ctx.setLineDash([]);
+  const g = ctx.createLinearGradient(0, pad.t, 0, H - pad.b);
+  g.addColorStop(0, lc + '18'); g.addColorStop(1, lc + '00');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(xS(0), yS(vals[0]));
+  vals.forEach((v, i) => ctx.lineTo(xS(i), yS(v)));
+  ctx.lineTo(xS(vals.length - 1), H - pad.b); ctx.lineTo(xS(0), H - pad.b); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = lc; ctx.lineWidth = 2; ctx.beginPath();
+  vals.forEach((v, i) => i === 0 ? ctx.moveTo(xS(i), yS(v)) : ctx.lineTo(xS(i), yS(v))); ctx.stroke();
+  const lx = xS(vals.length - 1); const ly = yS(vals[vals.length - 1]);
+  ctx.beginPath(); ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+  ctx.fillStyle = lc; ctx.fill(); ctx.strokeStyle = 'white'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.fillStyle = '#999'; ctx.font = '9px JetBrains Mono'; ctx.textAlign = 'center';
+  [[0, dates[0]], [Math.floor(vals.length / 2), dates[Math.floor(vals.length / 2)]], [vals.length - 1, dates[vals.length - 1]]]
+    .filter(([, d]) => d).forEach(([i, d]) => ctx.fillText(d, xS(i), H - 3));
+}
+
+function buildSazonMini(col, cm) {
+  const s = RAW.stats[col];
+  const vals = s.sazon;
+  const maxA = Math.max(...vals.map(Math.abs)) || 1;
+  document.getElementById('sz-bars').innerHTML = vals.map((v, i) => {
+    const h = Math.round(Math.abs(v) / maxA * 34) + 2;
+    const isCur = i === cm;
+    const c = v >= 0 ? 'var(--red)' : 'var(--green)';
+    return `<div class="smb-wrap">
+      <div style="width:100%;border-radius:2px 2px 0 0;height:${h}px;background:${c};opacity:${isCur ? 1 : .5};${isCur ? 'box-shadow:0 0 5px ' + c : ''}" title="${MESES_F[i]}: ${v > 0 ? '+' : ''}${v}%"></div>
+    </div>`;
+  }).join('');
+  document.getElementById('sz-lbls').innerHTML = vals.map((_, i) =>
+    `<div style="flex:1;text-align:center;font-size:7px;font-family:JetBrains Mono,monospace;color:${i === cm ? 'var(--ink)' : 'var(--ink3)'};font-weight:${i === cm ? 700 : 400}">${MESES[i]}</div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════
+
+function renderSazonPanel() {
+  const cm = new Date().getMonth();
+  const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                      'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const MESES_ABREV = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+  // Badge do mês no header
+  const badge = document.getElementById('sazon-mes-badge');
+  if (badge) badge.textContent = MESES_FULL[cm].toUpperCase();
+
+  const cols = Object.keys(RAW.stats).filter(c => c !== 'ptax_venda');
+  const container = document.getElementById('sazon-products');
+  if (!container) return;
+
+  container.innerHTML = cols.map(col => {
+    const s = RAW.stats[col];
+    const sazon = s.sazon;
+    const sv = sazon[cm];
+    const isUp   = sv >  0.5;
+    const isDown = sv < -0.5;
+    const cls    = isUp ? 'up' : isDown ? 'down' : 'flat';
+    const icon   = isUp ? '📈' : isDown ? '📉' : '➡';
+    const pctStr = (sv > 0 ? '+' : '') + sv.toFixed(1) + '%';
+
+    // Texto descritivo para o comprador
+    let textoMes = '';
+    if (sv > 0.5) {
+      textoMes = 'Hist. eleva preços em ~' + sv.toFixed(1) + '% em ' + MESES_FULL[cm];
+    } else if (sv < -0.5) {
+      textoMes = 'Hist. reduz preços em ~' + Math.abs(sv).toFixed(1) + '% em ' + MESES_FULL[cm];
+    } else {
+      textoMes = 'Hist. tem efeito neutro em ' + MESES_FULL[cm];
+    }
+
+    // Mini barras
+    const maxAbs = Math.max(...sazon.map(Math.abs), 0.1);
+    const barras = sazon.map((v, i) => {
+      const h = Math.round(Math.abs(v) / maxAbs * 30) + 2;
+      const bCls = (v >= 0 ? 'up' : 'down') + (i === cm ? ' cur' : '');
+      const opacity = i === cm ? '1' : '0.45';
+      return `<div class="spc-bar-wrap">
+        <div class="spc-bar ${bCls}" style="height:${h}px;opacity:${opacity}" title="${MESES_ABREV[i]}: ${v > 0 ? '+' : ''}${v}%"></div>
+        <div class="spc-bar-lbl ${i === cm ? 'cur' : ''}">${MESES_ABREV[i].charAt(0)}</div>
+      </div>`;
+    }).join('');
+
+    // Melhor e pior mês
+    const iMax = sazon.indexOf(Math.max(...sazon));
+    const iMin = sazon.indexOf(Math.min(...sazon));
+
+    return `
+      <div class="sazon-prod-card">
+        <div class="spc-header">
+          <span class="spc-emoji">${s.emoji}</span>
+          <span class="spc-nome">${s.nome}</span>
+        </div>
+        <div class="spc-mes-atual ${cls}">
+          <div class="spc-icon">${icon}</div>
+          <div class="spc-mes-info">
+            <div class="spc-mes-nome">${MESES_FULL[cm]}</div>
+            <div class="spc-mes-pct ${cls}">${pctStr}</div>
+            <div class="spc-mes-texto">${textoMes}</div>
+          </div>
+        </div>
+        <div class="spc-barras">
+          <div class="spc-barras-label">Variação histórica mensal — 12 meses</div>
+          <div class="spc-barras-grid">${barras}</div>
+        </div>
+        <div class="spc-extremos">
+          <div class="spc-ext-item">
+            <div class="spc-ext-label">Melhor mês</div>
+            <div class="spc-ext-mes">${MESES_ABREV[iMax]}</div>
+            <div class="spc-ext-val up">${sazon[iMax] > 0 ? '+' : ''}${sazon[iMax].toFixed(1)}%</div>
+          </div>
+          <div class="spc-ext-item">
+            <div class="spc-ext-label">Pior mês</div>
+            <div class="spc-ext-mes">${MESES_ABREV[iMin]}</div>
+            <div class="spc-ext-val down">${sazon[iMin] > 0 ? '+' : ''}${sazon[iMin].toFixed(1)}%</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const ptax = RAW.stats['ptax_venda'];
+  if (ptax) document.getElementById('ptax-val').textContent = 'R$ ' + ptax.last.toFixed(2);
+  document.getElementById('update-time').textContent = RAW.data_base + ' · ' + RAW.hora_coleta;
+  buildGrid();
+  renderSazonPanel();
+});
+
+window.addEventListener('resize', () => {
+  document.querySelectorAll('.mini-spark').forEach(c => drawSpark(c, c.dataset.col));
+  if (activeCol) drawDetailChart(activeCol);
+});
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
