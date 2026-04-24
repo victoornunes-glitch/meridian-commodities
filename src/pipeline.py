@@ -140,6 +140,9 @@ class ColetorCEPEAWidget:
             log.error("CEPEA Widget indisponível — dashboard usará histórico CSV")
             return {}
 
+        # Debug: mostrar primeiros 800 chars para diagnosticar formato
+        log.info(f"CEPEA preview (primeiros 800 chars):\n{js[:800]}")
+
         # Salvar JS bruto para debug
         (DATA_RAW / "cepea_widget_raw.js").write_text(js, encoding="utf-8")
 
@@ -166,6 +169,8 @@ class ColetorCEPEAWidget:
             json.dumps(resultados, ensure_ascii=False, indent=2)
         )
         log.info(f"CEPEA Widget → {len(resultados)}/{len(IDS_WIDGET)} produtos coletados")
+        if len(resultados) == 0:
+            log.warning(f"Parser extraiu 0 produtos. Datas encontradas: {datas[:3]} | Valores: {valores[:3]}")
         return resultados
 
     def para_dataframe(self, resultados: dict) -> pd.DataFrame:
