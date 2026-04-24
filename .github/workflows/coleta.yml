@@ -12,7 +12,7 @@ permissions:
 jobs:
   coletar-e-publicar:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -37,11 +37,16 @@ jobs:
           restore-keys: |
             cache-dados-${{ runner.os }}-
 
-      - name: Executar pipeline
+      - name: Executar pipeline (coleta)
         run: python src/pipeline.py --force
         env:
           PYTHONPATH: src
           SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+
+      - name: Executar modelo (sinais preditivos)
+        run: python src/modelo.py
+        env:
+          PYTHONPATH: src
 
       - name: Gerar dashboard
         run: python src/gerar_dashboard.py
@@ -66,7 +71,9 @@ jobs:
       - name: Resumo da execução
         if: always()
         run: |
+          echo "=== Sinais do Modelo ==="
+          cat data/cache/sinais_modelo.json 2>/dev/null || echo "Sem sinais"
           echo "=== Status da Coleta ==="
-          cat data/cache/ultimo_status.json 2>/dev/null || echo "Sem status gerado"
+          cat data/cache/ultimo_status.json 2>/dev/null || echo "Sem status"
           echo "=== Arquivos em docs/ ==="
           ls -lh docs/
