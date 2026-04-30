@@ -1,6 +1,6 @@
 {
-  "data_base": "29/04/2026",
-  "hora_coleta": "16:21",
+  "data_base": "30/04/2026",
+  "hora_coleta": "16:08",
   "stats": {
     "boi_cepea_brl_arroba": {
       "nome": "Boi Gordo",
@@ -211,7 +211,7 @@
       "grupo": "Proteínas",
       "fonte_label": "CEPEA",
       "fonte_desc": "CEPEA · Suíno SP",
-      "data_ref": "29/04/2026",
+      "data_ref": "30/04/2026",
       "estimado": false,
       "last": 5.56,
       "var7": 0.0,
@@ -1120,16 +1120,16 @@
       "grupo": "Macro",
       "fonte_label": "BCB PTAX",
       "fonte_desc": "BCB PTAX · PTAX",
-      "data_ref": "29/04/2026",
+      "data_ref": "30/04/2026",
       "estimado": false,
-      "last": 5.0,
-      "var7": 0.9,
+      "last": 4.99,
+      "var7": -0.4,
       "var30": -1.8,
-      "var90": -2.8,
+      "var90": -2.9,
       "mm20": 4.99,
       "mm60": 5.14,
       "vol30": 8.1,
-      "score": -3,
+      "score": -5,
       "sinal": "BAIXA",
       "probs": [
         70.0,
@@ -1183,7 +1183,7 @@
         5.02,
         4.97,
         5.01,
-        5.0
+        4.99
       ],
       "dates": [
         "09/11/25",
