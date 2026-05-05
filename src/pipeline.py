@@ -77,7 +77,7 @@ WIDGET_HEADERS = WIDGET_HEADERS_LIST[0]
 class ColetorCEPEAWidget:
     def _valor_float(self, v: str) -> float:
         import re
-        v = re.sub(r'[R\$¢\s]', '', v).strip()
+        v = re.sub(r'[R\$¢\s]', '', v.replace('&nbsp;', '').replace('\xa0', '')).strip()
         v = v.replace(".", "").replace(",", ".")
         return float(v)
 
@@ -180,8 +180,9 @@ class ColetorCEPEAWidget:
             r"([A-Za-z\xc0-\xff][A-Za-z\xc0-\xff0-9\s\-\(\)/\\.]+?)"
             r"<br"
             r".*?"
-            r"(R\$\s*[\d.]+,[\d]{2}|\xc2\xa2R\$\s*[\d.]+,[\d]{2}|"
-            r"¢R\$\s*[\d.]+,[\d]{2})",
+            r"(?:R\$|\xa2R\$|\xa2R\$|\xc2\xa2R\$|¢R\$)"
+            r"(?:\s|&nbsp;|\xa0)*"
+            r"([\d.]+,\d{2})",
             _re.DOTALL | _re.IGNORECASE
         )
 
@@ -223,7 +224,7 @@ class ColetorCEPEAWidget:
         if not resultados:
             datas   = _re.findall(r"(\d{2}/\d{2}/\d{4})", js)
             valores = _re.findall(
-                r"(R\$\s*[\d.]+,[\d]{2}|¢R\$\s*[\d.]+,[\d]{2})", js
+                r"(?:R\$|¢R\$|\xa2R\$)(?:\s|&nbsp;|\xa0)*([\d.]+,\d{2})", js
             )
             log.info(f"Fallback posicional: {len(datas)} datas, {len(valores)} valores")
             for i, id_ in enumerate(IDS_WIDGET):
