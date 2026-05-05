@@ -2,32 +2,38 @@ name: Coleta de Dados e Atualização do Dashboard
 
 on:
   schedule:
-    - cron: "30 10 * * 1-5"
-  workflow_dispatch:
+    # Toda segunda e quarta às 10h30 UTC = 07h30 BRT
+    - cron: "30 10 * * 1"
+    - cron: "30 10 * * 3"
+  workflow_dispatch:   # permite rodar manualmente pelo GitHub
 
 permissions:
-  contents: write
+  contents: write      # necessário para o commit automático
 
 jobs:
   coletar-e-publicar:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
 
     steps:
+      # 1 — Checkout do repositório
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0   # histórico completo (para o cache de dados)
 
+      # 2 — Configurar Python
       - name: Configurar Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
 
+      # 3 — Instalar dependências
       - name: Instalar dependências
         run: pip install -r requirements.txt
 
+      # 4 — Restaurar cache de dados históricos (parquet)
       - name: Restaurar cache de dados
         uses: actions/cache@v4
         with:
@@ -36,27 +42,29 @@ jobs:
           restore-keys: |
             cache-dados-${{ runner.os }}-
 
-      - name: Executar pipeline (coleta)
-        run: python src/pipeline.py --force
+      # 5 — Executar pipeline de coleta
+      - name: Executar pipeline
+        run: python src/pipeline.py
         env:
           PYTHONPATH: src
           SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+          # opcionais — descomentar se a chave tiver acesso a esses recursos
+          # SCRAPER_API_PREMIUM: "true"
+          # SCRAPER_API_COUNTRY: "br"
 
-      - name: Executar modelo (sinais preditivos)
-        run: python src/modelo.py
-        env:
-          PYTHONPATH: src
-
+      # 6 — Gerar dashboard (atualiza docs/data.json e docs/index.html)
       - name: Gerar dashboard
         run: python src/gerar_dashboard.py
         env:
           PYTHONPATH: src
 
+      # 7 — Verificar se houve mudanças nos docs
       - name: Verificar mudanças
         id: check_changes
         run: |
           git diff --quiet docs/ && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
 
+      # 8 — Commit e push automático
       - name: Commit e push
         if: steps.check_changes.outputs.changed == 'true'
         run: |
@@ -67,12 +75,11 @@ jobs:
           git commit -m "📊 Atualização automática $(date +'%d/%m/%Y %H:%M') BRT"
           git push
 
+      # 9 — Log de execução
       - name: Resumo da execução
         if: always()
         run: |
-          echo "=== Sinais do Modelo ==="
-          cat data/cache/sinais_modelo.json 2>/dev/null || echo "Sem sinais"
           echo "=== Status da Coleta ==="
-          cat data/cache/ultimo_status.json 2>/dev/null || echo "Sem status"
+          cat data/cache/ultimo_status.json 2>/dev/null || echo "Sem status gerado"
           echo "=== Arquivos em docs/ ==="
           ls -lh docs/
