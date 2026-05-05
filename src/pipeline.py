@@ -220,13 +220,14 @@ class ColetorCEPEAWidget:
             log.warning("Parser por nome sem matches — tentando por posicao")
             log.info(f"JS preview 800 chars:\n{js[:800]}")
 
-        # ── Estratégia 2: Fallback posicional ────────────────────────────
+        # ── Estratégia 2: Fallback — número brasileiro (formato X,XX ou X.XXX,XX) ──
+        # CSS usa ponto decimal (0.8em) — nunca vírgula. Preços BR usam vírgula.
+        # Essa regex pega APENAS preços brasileiros independente do prefixo R$ / &nbsp;
         if not resultados:
             datas   = _re.findall(r"(\d{2}/\d{2}/\d{4})", js)
-            valores = _re.findall(
-                r"(?:R\$|¢R\$|\xa2R\$)(?:\s|&nbsp;|\xa0)*([\d.]+,\d{2})", js
-            )
+            valores = _re.findall(r"(\d{1,3}(?:\.\d{3})*,\d{2})", js)
             log.info(f"Fallback posicional: {len(datas)} datas, {len(valores)} valores")
+            log.info(f"JS completo para debug (6000 chars):\n{js[-4000:]}")
             for i, id_ in enumerate(IDS_WIDGET):
                 if id_ not in INDICADORES_WIDGET:
                     continue
@@ -239,8 +240,9 @@ class ColetorCEPEAWidget:
                             "valor": v, "data": d,
                             "nome": nome, "unidade": unid
                         }
-                    except Exception:
-                        pass
+                        log.info(f"  [{i}] {nome}: {v} ({d})")
+                    except Exception as ex:
+                        log.warning(f"  [{i}] {nome}: erro {ex}")
 
         # Salvar JSON do resultado
         if resultados:
