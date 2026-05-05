@@ -124,53 +124,135 @@ class ColetorCEPEAWidget:
         return None
 
     def coletar(self) -> dict:
-        import re
+        import re as _re
         url = self._montar_url()
 
-        # Tentativa 1: acesso direto
         log.info("CEPEA Widget → tentando acesso direto...")
         js = self._fetch_direto(url)
-
-        # Tentativa 2: ScraperAPI (proxy residencial)
         if not js:
             log.info("CEPEA Widget → tentando ScraperAPI...")
             js = self._fetch_scraperapi(url)
-
         if not js:
-            log.error("CEPEA Widget indisponível — dashboard usará histórico CSV")
+            log.error("CEPEA Widget indisponivel — usando historico CSV")
             return {}
 
-        # Debug: mostrar primeiros 800 chars para diagnosticar formato
-        log.info(f"CEPEA preview (primeiros 800 chars):\n{js[:800]}")
-
         # Salvar JS bruto para debug
-        (DATA_RAW / "cepea_widget_raw.js").write_text(js, encoding="utf-8")
+        try:
+            (DATA_RAW / "cepea_widget_raw.js").write_text(js, encoding="utf-8")
+        except Exception:
+            pass
 
-        # Extrair datas e valores na ordem
-        datas  = re.findall(r"(\d{2}/\d{2}/\d{4})", js)
-        valores = re.findall(r"(R\$\s*[\d.]+,\d{2}|¢R\$\s*[\d.]+,\d{2})", js)
+        log.info(f"CEPEA Widget → {len(js)} bytes recebidos")
+
+        # ── Mapeamento nome (visivel no widget) → coluna interna ──────────
+        NOMES_MAP = {
+            "boi gordo":         "boi_cepea_brl_arroba",
+            "cafe arabica":      "cafe_arabica_brl_sc",
+            "cafe robusta":      "cafe_robusta_brl_sc",
+            "frango congelado":  "frango_congelado_brl_kg",
+            "frango resfriado":  "frango_resfriado_brl_kg",
+            "frango":            "frango_congelado_brl_kg",
+            "soja paranagua":    "soja_paranagua_brl_sc",
+            "soja paranaguá":    "soja_paranagua_brl_sc",
+            "soja - pr":         "soja_pr_brl_sc",
+            "soja pr":           "soja_pr_brl_sc",
+            "ovos":              "ovos_bastos_brl_cx",
+            "suino":             "suino_sp_brl_kg",
+            "suíno":             "suino_sp_brl_kg",
+            "trigo":             "trigo_pr_brl_t",
+            "leite":             "leite_brl_litro",
+            "milho":             "milho_brl_sc",
+            "feijao":            "feijao_carioca_brl_sc",
+            "feijão":            "feijao_carioca_brl_sc",
+            "algodao":           "algodao_brl_lp",
+            "algodão":           "algodao_brl_lp",
+            "arroz":             "arroz_brl_sc",
+            "acucar":            "acucar_brl_sc",
+            "açúcar":            "acucar_brl_sc",
+        }
+
+        # ── Estratégia 1: Parser por nome (robusto) ───────────────────────
+        # Padrão: data | nome-produto<br>unidade | valor monetário
+        padrao = _re.compile(
+            r"(\d{2}/\d{2}/\d{4})"
+            r"[^<]*</td>"
+            r"[^<]*<td[^>]*>"
+            r"([A-Za-z\xc0-\xff][A-Za-z\xc0-\xff0-9\s\-\(\)/\\.]+?)"
+            r"<br"
+            r".*?"
+            r"(R\$\s*[\d.]+,[\d]{2}|\xc2\xa2R\$\s*[\d.]+,[\d]{2}|"
+            r"¢R\$\s*[\d.]+,[\d]{2})",
+            _re.DOTALL | _re.IGNORECASE
+        )
 
         resultados = {}
-        for i, id_ in enumerate(IDS_WIDGET):
-            if id_ not in INDICADORES_WIDGET:
-                continue
-            col, nome, unid = INDICADORES_WIDGET[id_]
-            if i < len(valores):
+        matches = padrao.findall(js)
+
+        if matches:
+            log.info(f"Parser por nome → {len(matches)} linhas encontradas")
+            for data_str, nome_raw, valor_raw in matches:
+                nome_clean = nome_raw.strip().lower()
+                # normalizar acentos comuns
+                nome_clean = nome_clean.replace("\u00e3", "a").replace("\u00fa", "u")
+                col = None
+                for chave, coluna in NOMES_MAP.items():
+                    if chave in nome_clean:
+                        col = coluna
+                        break
+                if not col:
+                    log.debug(f"  Nome nao mapeado: '{nome_raw.strip()}'")
+                    continue
+                if col in resultados:
+                    continue  # manter apenas o primeiro match por produto
                 try:
-                    v = self._valor_float(valores[i])
-                    d = datas[i] if i < len(datas) else str(TODAY)
-                    resultados[col] = {"valor": v, "data": d, "nome": nome, "unidade": unid}
-                    log.info(f"  {nome}: {v} {unid} ({d})")
+                    v = self._valor_float(valor_raw)
+                    resultados[col] = {
+                        "valor":   v,
+                        "data":    data_str,
+                        "nome":    nome_raw.strip(),
+                        "unidade": "",
+                    }
+                    log.info(f"  {nome_raw.strip()}: {v} ({data_str})")
                 except Exception as ex:
-                    log.warning(f"  {nome}: erro parse — {ex}")
+                    log.warning(f"  Erro parse '{nome_raw.strip()}': {ex}")
+        else:
+            log.warning("Parser por nome sem matches — tentando por posicao")
+            log.info(f"JS preview 800 chars:\n{js[:800]}")
+
+        # ── Estratégia 2: Fallback posicional ────────────────────────────
+        if not resultados:
+            datas   = _re.findall(r"(\d{2}/\d{2}/\d{4})", js)
+            valores = _re.findall(
+                r"(R\$\s*[\d.]+,[\d]{2}|¢R\$\s*[\d.]+,[\d]{2})", js
+            )
+            log.info(f"Fallback posicional: {len(datas)} datas, {len(valores)} valores")
+            for i, id_ in enumerate(IDS_WIDGET):
+                if id_ not in INDICADORES_WIDGET:
+                    continue
+                col, nome, unid = INDICADORES_WIDGET[id_]
+                if i < len(valores):
+                    try:
+                        v = self._valor_float(valores[i])
+                        d = datas[i] if i < len(datas) else str(TODAY)
+                        resultados[col] = {
+                            "valor": v, "data": d,
+                            "nome": nome, "unidade": unid
+                        }
+                    except Exception:
+                        pass
 
         # Salvar JSON do resultado
-        (CACHE_DIR / "cepea_widget_ultimo.json").write_text(
-            json.dumps(resultados, ensure_ascii=False, indent=2)
-        )
+        if resultados:
+            try:
+                (CACHE_DIR / "cepea_widget_ultimo.json").write_text(
+                    json.dumps(resultados, ensure_ascii=False, indent=2)
+                )
+            except Exception as e:
+                log.warning(f"Erro ao salvar widget JSON: {e}")
+        else:
+            log.error("CEPEA Widget → 0 produtos em ambas as estrategias")
+
         log.info(f"CEPEA Widget → {len(resultados)}/{len(IDS_WIDGET)} produtos coletados")
-        if len(resultados) == 0:
-            log.warning(f"Parser extraiu 0 produtos. Datas encontradas: {datas[:3]} | Valores: {valores[:3]}")
         return resultados
 
     def para_dataframe(self, resultados: dict) -> pd.DataFrame:
