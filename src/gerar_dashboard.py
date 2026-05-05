@@ -31,6 +31,11 @@ PRODUTOS = {
     "arroz_brl_sc":            {"nome":"Arroz IRGA-RS",      "emoji":"🍚","unidade":"R$/sc",  "grupo":"Grãos"},
     "cafe_arabica_brl_sc":     {"nome":"Café Arábica",       "emoji":"☕","unidade":"R$/sc",  "grupo":"Outros"},
     "acucar_brl_sc":           {"nome":"Açúcar Cristal SP",  "emoji":"🍬","unidade":"R$/sc",  "grupo":"Outros"},
+        "cafe_robusta_brl_sc":     {"nome":"Café Robusta",        "emoji":"☕","unidade":"R$/sc",   "grupo":"Outros"},
+    "frango_resfriado_brl_kg": {"nome":"Frango Resfriado",    "emoji":"🐔","unidade":"R$/kg",   "grupo":"Proteínas"},
+    "leite_brl_litro":         {"nome":"Leite",               "emoji":"🥛","unidade":"R$/litro","grupo":"Proteínas"},
+    "feijao_carioca_brl_sc":   {"nome":"Feijão Carioca SP",   "emoji":"🫘","unidade":"R$/sc",   "grupo":"Grãos"},
+    "algodao_brl_lp":          {"nome":"Algodão",             "emoji":"🌿","unidade":"¢R$/lp",  "grupo":"Outros"},
     "ptax_venda":              {"nome":"PTAX",               "emoji":"💵","unidade":"R$/USD", "grupo":"Macro"},
 }
 
@@ -46,6 +51,11 @@ SAZON = {
     "arroz_brl_sc":            [1.0,1.5,0.5,-0.5,-2.0,-2.5,-1.5,0.5,2.0,2.5,2.0,1.5],
     "cafe_arabica_brl_sc":     [1.0,2.5,1.5,0.5,-1.0,-2.0,-1.5,0.5,2.0,3.0,2.5,1.5],
     "acucar_brl_sc":           [1.0,1.5,0.5,-0.5,-1.5,-2.0,-1.0,0.5,1.5,2.0,1.5,1.0],
+        "cafe_robusta_brl_sc":     [1.0,2.5,1.5,0.5,-1.0,-2.0,-1.5,0.5,2.0,3.0,2.5,1.5],
+    "frango_resfriado_brl_kg": [0.5,3.5,1.7,1.3,0.2,-2.3,-4.2,-2.9,0.2,0.2,2.4,2.3],
+    "leite_brl_litro":         [1.5,1.0,0.5,-0.5,-1.0,-1.5,-0.5,0.5,1.0,1.5,2.0,2.5],
+    "feijao_carioca_brl_sc":   [2.0,3.0,1.5,-1.0,-3.0,-2.5,-1.0,0.5,2.0,3.0,2.5,2.0],
+    "algodao_brl_lp":          [1.0,1.5,0.5,-0.5,-1.5,-2.0,-1.0,0.5,1.5,2.0,1.5,1.0],
     "ptax_venda":              [0.2,0.9,2.2,0.6,-3.0,0.7,1.0,1.5,2.8,2.7,-0.4,3.2],
 }
 
@@ -55,7 +65,7 @@ FONTE = {
     "milho_brl_sc":"CEPEA/ESALQ","soja_paranagua_brl_sc":"CEPEA/ESALQ",
     "soja_pr_brl_sc":"CEPEA/ESALQ","trigo_pr_brl_t":"CEPEA",
     "arroz_brl_sc":"CEPEA/IRGA","cafe_arabica_brl_sc":"CEPEA/ESALQ",
-    "acucar_brl_sc":"CEPEA/ESALQ","ptax_venda":"BCB PTAX",
+    "acucar_brl_sc":"CEPEA/ESALQ","cafe_robusta_brl_sc":"CEPEA/ESALQ","frango_resfriado_brl_kg":"CEPEA","leite_brl_litro":"CEPEA","feijao_carioca_brl_sc":"CEPEA","algodao_brl_lp":"CEPEA/ESALQ","ptax_venda":"BCB PTAX",
 }
 
 def _var(s, n):
@@ -153,7 +163,7 @@ def carregar_melhor_dataset() -> pd.DataFrame:
     for col, s in frames.items():
         df[col] = s.reindex(idx)
 
-    df = df.ffill(limit=5).reset_index()
+    df = df.ffill(limit=30).reset_index()  # 30 dias para cobrir fins de semana e feriados
     log.info(f"Dataset final: {df.shape} | {df['data'].min():%d/%m/%Y} → {df['data'].max():%d/%m/%Y}")
 
     # Listar colunas disponíveis vs necessárias
@@ -203,9 +213,14 @@ def gerar_raw(df: pd.DataFrame) -> dict:
         prec_b  = sinal_m.get("prec_baixa", None)
 
         try:
-            dr = pd.Timestamp(df["data"].iloc[s.last_valid_index()
-                if isinstance(s.last_valid_index(), int)
-                else df.index[df["data"]==s.last_valid_index()][0]]).strftime("%d/%m/%Y")
+            # Última data com dado real (onde o valor mudou vs dia anterior)
+            s_nofill = df[["data", col]].copy()
+            s_nofill.loc[s_nofill[col] == s_nofill[col].shift(1), col] = float("nan")
+            last_real_row = s_nofill[col].last_valid_index()
+            if last_real_row is not None:
+                dr = df["data"].iloc[last_real_row].strftime("%d/%m/%Y")
+            else:
+                dr = hoje.strftime("%d/%m/%Y")
         except:
             dr = hoje.strftime("%d/%m/%Y")
 
