@@ -133,6 +133,7 @@ class ColetorCEPEAWidget:
 
     def coletar(self) -> dict:
         import re as _re
+        import unicodedata as _ud
         url = self._montar_url()
 
         log.info("CEPEA Widget → tentando acesso direto...")
@@ -164,7 +165,7 @@ class ColetorCEPEAWidget:
             "soja paranaguá":    "soja_paranagua_brl_sc",
             "soja - pr":         "soja_pr_brl_sc",
             "soja pr":           "soja_pr_brl_sc",
-            "ovos":              "ovos_bastos_brl_cx",
+            "ovos":              "ovos_brancos_brl_cx",  # alinhado com INDICADORES_WIDGET
             "suino":             "suino_sp_brl_kg",
             "suíno":             "suino_sp_brl_kg",
             "trigo":             "trigo_pr_brl_t",
@@ -180,17 +181,19 @@ class ColetorCEPEAWidget:
         }
 
         # ── Estratégia 1: Parser por nome (robusto) ───────────────────────
-        # Padrão: data | nome-produto<br>unidade | valor monetário
+        # Estrutura real do widget (verificada 2026-05 em data/raw/cepea_widget_raw.js):
+        #   <td>04/05/2026</td>
+        #   <td><span class="maior">Café Robusta</span><br /> <span class="unidade">sc de 60kg</span></td>
+        #   <td>R$ <span class="maior">910,36</span></td>
+        # Casos especiais:
+        #   - Leite: data MM/YYYY (sem dia) e valor com 4 decimais (2,3924)
+        #   - Algodão: prefixo "¢R$" (cents)
         padrao = _re.compile(
-            r"(\d{2}/\d{2}/\d{4})"
-            r"[^<]*</td>"
-            r"[^<]*<td[^>]*>"
-            r"([A-Za-z\xc0-\xff][A-Za-z\xc0-\xff0-9\s\-\(\)/\\.]+?)"
-            r"<br"
-            r".*?"
-            r"(?:R\$|\xa2R\$|\xa2R\$|\xc2\xa2R\$|¢R\$)"
-            r"(?:\s|&nbsp;|\xa0)*"
-            r"([\d.]+,\d{2})",
+            r"<td>\s*(\d{2}/(?:\d{2}/)?\d{4})\s*</td>"               # data: dd/mm/yyyy ou mm/yyyy
+            r"\s*<td>\s*<span[^>]*>([^<]+?)</span>"                    # nome no span "maior"
+            r".*?"                                                       # consome <br/>, unidade, etc.
+            r"<td>\s*(?:¢R\$|\xa2R\$|R\$)\s*"                        # prefixo R$ ou ¢R$
+            r"<span[^>]*>([\d.]+,\d{2,4})</span>",                      # valor 2-4 decimais
             _re.DOTALL | _re.IGNORECASE
         )
 
@@ -200,9 +203,10 @@ class ColetorCEPEAWidget:
         if matches:
             log.info(f"Parser por nome → {len(matches)} linhas encontradas")
             for data_str, nome_raw, valor_raw in matches:
-                nome_clean = nome_raw.strip().lower()
-                # normalizar acentos comuns
-                nome_clean = nome_clean.replace("\u00e3", "a").replace("\u00fa", "u")
+                # Remoção robusta de TODOS os acentos via NFKD.
+                # Antes só tratava ã e ú, perdendo Café Arábica/Robusta e Açúcar.
+                nome_clean = _ud.normalize("NFKD", nome_raw.strip().lower()) \
+                    .encode("ASCII", "ignore").decode("ASCII")
                 col = None
                 for chave, coluna in NOMES_MAP.items():
                     if chave in nome_clean:
@@ -232,8 +236,9 @@ class ColetorCEPEAWidget:
         # CSS usa ponto decimal (0.8em) — nunca vírgula. Preços BR usam vírgula.
         # Essa regex pega APENAS preços brasileiros independente do prefixo R$ / &nbsp;
         if not resultados:
-            datas   = _re.findall(r"(\d{2}/\d{2}/\d{4})", js)
-            valores = _re.findall(r"(\d{1,3}(?:\.\d{3})*,\d{2})", js)
+            # aceitar dd/mm/yyyy E mm/yyyy (leite); 2-4 decimais (leite=4)
+            datas   = _re.findall(r"(\d{2}/(?:\d{2}/)?\d{4})", js)
+            valores = _re.findall(r"(\d{1,3}(?:\.\d{3})*,\d{2,4})", js)
             log.info(f"Fallback posicional: {len(datas)} datas, {len(valores)} valores")
             log.info(f"JS completo para debug (6000 chars):\n{js[-4000:]}")
             for i, id_ in enumerate(IDS_WIDGET):
