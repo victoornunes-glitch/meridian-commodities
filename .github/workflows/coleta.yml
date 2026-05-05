@@ -6,6 +6,11 @@ on:
     - cron: "30 10 * * 1"
     - cron: "30 10 * * 3"
   workflow_dispatch:   # permite rodar manualmente pelo GitHub
+    inputs:
+      force:
+        description: "Forçar recoleta ignorando o cache do dia"
+        type: boolean
+        default: true
 
 permissions:
   contents: write      # necessário para o commit automático
@@ -43,8 +48,10 @@ jobs:
             cache-dados-${{ runner.os }}-
 
       # 5 — Executar pipeline de coleta
+      # Em workflow_dispatch (manual), inputs.force=true por default → roda com --force.
+      # Em schedule (cron), inputs não existe e a expressão vira string vazia.
       - name: Executar pipeline
-        run: python src/pipeline.py
+        run: python src/pipeline.py ${{ inputs.force && '--force' || '' }}
         env:
           PYTHONPATH: src
           SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
