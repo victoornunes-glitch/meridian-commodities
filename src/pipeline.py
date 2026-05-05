@@ -11,6 +11,14 @@ from pathlib import Path
 
 warnings.filterwarnings("ignore")
 
+# ─── Console em UTF-8 (Windows: PowerShell padrão é cp1252 e quebra com → á etc.)
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except (AttributeError, OSError):
+        pass
+
 BASE       = Path(__file__).parent.parent
 DATA_RAW   = BASE / "data" / "raw"
 DATA_PROC  = BASE / "data" / "processed"
@@ -24,7 +32,7 @@ logging.basicConfig(
     format="%(asctime)s  %(levelname)-8s  %(message)s",
     datefmt="%H:%M:%S",
     handlers=[
-        logging.FileHandler(LOGS_DIR / f"pipeline_{datetime.now():%Y%m%d}.log"),
+        logging.FileHandler(LOGS_DIR / f"pipeline_{datetime.now():%Y%m%d}.log", encoding="utf-8"),
         logging.StreamHandler(),
     ],
 )
