@@ -1,61 +1,61 @@
 {
   "boi_cepea_brl_arroba": {
-    "valor": 344.8,
-    "data": "19/05/2026",
+    "valor": 345.75,
+    "data": "22/05/2026",
     "nome": "Boi Gordo",
     "unidade": ""
   },
   "cafe_arabica_brl_sc": {
-    "valor": 1589.67,
-    "data": "19/05/2026",
+    "valor": 1612.87,
+    "data": "22/05/2026",
     "nome": "Café Arábica",
     "unidade": ""
   },
   "cafe_robusta_brl_sc": {
-    "valor": 921.88,
-    "data": "19/05/2026",
+    "valor": 941.92,
+    "data": "22/05/2026",
     "nome": "Café Robusta",
     "unidade": ""
   },
   "frango_congelado_brl_kg": {
-    "valor": 7.58,
-    "data": "19/05/2026",
+    "valor": 7.48,
+    "data": "22/05/2026",
     "nome": "Frango Congelado",
     "unidade": ""
   },
   "frango_resfriado_brl_kg": {
-    "valor": 7.59,
-    "data": "19/05/2026",
+    "valor": 7.49,
+    "data": "22/05/2026",
     "nome": "Frango Resfriado",
     "unidade": ""
   },
   "soja_paranagua_brl_sc": {
-    "valor": 130.57,
-    "data": "19/05/2026",
+    "valor": 129.62,
+    "data": "22/05/2026",
     "nome": "Soja Paranaguá",
     "unidade": ""
   },
   "soja_pr_brl_sc": {
-    "valor": 123.67,
-    "data": "19/05/2026",
+    "valor": 123.48,
+    "data": "22/05/2026",
     "nome": "Soja - PR",
     "unidade": ""
   },
   "ovos_brancos_brl_cx": {
-    "valor": 146.48,
-    "data": "19/05/2026",
+    "valor": 146.63,
+    "data": "22/05/2026",
     "nome": "Ovos Brancos - Bastos (SP) - FOB",
     "unidade": ""
   },
   "suino_sp_brl_kg": {
     "valor": 5.36,
-    "data": "19/05/2026",
+    "data": "22/05/2026",
     "nome": "Suíno - SP",
     "unidade": ""
   },
   "trigo_pr_brl_t": {
-    "valor": 1360.52,
-    "data": "19/05/2026",
+    "valor": 1356.08,
+    "data": "22/05/2026",
     "nome": "Trigo - PR",
     "unidade": ""
   },
@@ -66,8 +66,8 @@
     "unidade": ""
   },
   "milho_brl_sc": {
-    "valor": 65.28,
-    "data": "19/05/2026",
+    "valor": 65.47,
+    "data": "22/05/2026",
     "nome": "Milho",
     "unidade": ""
   },
@@ -78,20 +78,20 @@
     "unidade": ""
   },
   "algodao_brl_lp": {
-    "valor": 422.14,
-    "data": "19/05/2026",
+    "valor": 425.14,
+    "data": "22/05/2026",
     "nome": "Algodão",
     "unidade": ""
   },
   "arroz_brl_sc": {
-    "valor": 60.66,
-    "data": "19/05/2026",
+    "valor": 59.98,
+    "data": "22/05/2026",
     "nome": "Arroz",
     "unidade": ""
   },
   "acucar_brl_sc": {
-    "valor": 93.96,
-    "data": "19/05/2026",
+    "valor": 93.56,
+    "data": "22/05/2026",
     "nome": "Açúcar - SP",
     "unidade": ""
   }
