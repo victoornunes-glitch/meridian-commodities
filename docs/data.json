@@ -1,6 +1,6 @@
 {
-  "data_base": "07/09/2026",
-  "hora_coleta": "15:57",
+  "data_base": "09/09/2026",
+  "hora_coleta": "14:44",
   "stats": {
     "boi_cepea_brl_arroba": {
       "nome": "Boi Gordo",
@@ -9,15 +9,15 @@
       "grupo": "Proteínas",
       "fonte_label": "CEPEA/B3",
       "fonte_desc": "CEPEA/B3 · Boi Gordo",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
-      "last": 347.7,
-      "var7": -4.1,
-      "var30": -4.1,
-      "var90": -0.8,
-      "mm20": 361.66,
-      "mm60": 362.13,
-      "vol30": 11.8,
+      "last": 348.35,
+      "var7": -3.9,
+      "var30": -3.9,
+      "var90": -0.7,
+      "mm20": 361.7,
+      "mm60": 362.14,
+      "vol30": 11.2,
       "score": -5,
       "sinal": "ALTA",
       "probs": [
@@ -72,7 +72,7 @@
         362.4,
         362.4,
         362.4,
-        347.7
+        348.35
       ],
       "dates": [
         "22/03/26",
@@ -110,15 +110,15 @@
       "grupo": "Proteínas",
       "fonte_label": "CEPEA",
       "fonte_desc": "CEPEA · Frango Congelado",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
-      "last": 7.61,
-      "var7": 5.3,
-      "var30": 5.3,
-      "var90": 11.7,
+      "last": 7.63,
+      "var7": 5.5,
+      "var30": 5.5,
+      "var90": 12.0,
       "mm20": 7.25,
       "mm60": 7.24,
-      "vol30": 15.2,
+      "vol30": 16.0,
       "score": 5,
       "sinal": "LATERAL",
       "probs": [
@@ -173,7 +173,7 @@
         7.23,
         7.23,
         7.23,
-        7.61
+        7.63
       ],
       "dates": [
         "22/03/26",
@@ -211,7 +211,7 @@
       "grupo": "Proteínas",
       "fonte_label": "CEPEA",
       "fonte_desc": "CEPEA · Suíno SP",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
       "last": 4.83,
       "var7": -13.1,
@@ -413,15 +413,15 @@
       "grupo": "Grãos",
       "fonte_label": "CEPEA/ESALQ",
       "fonte_desc": "CEPEA/ESALQ · Milho ESALQ",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
-      "last": 70.93,
-      "var7": 6.9,
-      "var30": 6.9,
-      "var90": -0.6,
+      "last": 70.9,
+      "var7": 6.8,
+      "var30": 6.8,
+      "var90": -0.7,
       "mm20": 66.59,
       "mm60": 67.62,
-      "vol30": 20.0,
+      "vol30": 19.8,
       "score": 3,
       "sinal": "BAIXA",
       "probs": [
@@ -476,7 +476,7 @@
         66.36,
         66.36,
         66.36,
-        70.93
+        70.9
       ],
       "dates": [
         "22/03/26",
@@ -514,15 +514,15 @@
       "grupo": "Grãos",
       "fonte_label": "CEPEA/ESALQ",
       "fonte_desc": "CEPEA/ESALQ · Soja Paranaguá",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
-      "last": 160.87,
-      "var7": 26.8,
-      "var30": 26.8,
-      "var90": 23.2,
-      "mm20": 128.6,
-      "mm60": 127.9,
-      "vol30": 77.6,
+      "last": 160.46,
+      "var7": 26.4,
+      "var30": 26.4,
+      "var90": 22.9,
+      "mm20": 128.58,
+      "mm60": 127.89,
+      "vol30": 76.6,
       "score": 5,
       "sinal": "BAIXA",
       "probs": [
@@ -550,7 +550,7 @@
         5.5
       ],
       "min": 124.34,
-      "max": 160.87,
+      "max": 160.46,
       "hist": [
         130.61,
         130.01,
@@ -577,7 +577,7 @@
         126.9,
         126.9,
         126.9,
-        160.87
+        160.46
       ],
       "dates": [
         "22/03/26",
@@ -615,15 +615,15 @@
       "grupo": "Grãos",
       "fonte_label": "CEPEA/ESALQ",
       "fonte_desc": "CEPEA/ESALQ · Soja PR",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
-      "last": 152.1,
-      "var7": 26.2,
-      "var30": 26.2,
-      "var90": 23.2,
-      "mm20": 122.07,
+      "last": 152.23,
+      "var7": 26.3,
+      "var30": 26.3,
+      "var90": 23.4,
+      "mm20": 122.08,
       "mm60": 121.61,
-      "vol30": 76.0,
+      "vol30": 76.3,
       "score": 5,
       "sinal": "BAIXA",
       "probs": [
@@ -651,7 +651,7 @@
         5.5
       ],
       "min": 118.69,
-      "max": 152.1,
+      "max": 152.23,
       "hist": [
         123.41,
         124.1,
@@ -678,7 +678,7 @@
         120.49,
         120.49,
         120.49,
-        152.1
+        152.23
       ],
       "dates": [
         "22/03/26",
@@ -716,15 +716,15 @@
       "grupo": "Grãos",
       "fonte_label": "CEPEA",
       "fonte_desc": "CEPEA · Trigo PR",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
-      "last": 1457.55,
-      "var7": 8.9,
-      "var30": 8.9,
-      "var90": 16.5,
-      "mm20": 1344.18,
-      "mm60": 1322.67,
-      "vol30": 25.8,
+      "last": 1461.42,
+      "var7": 9.2,
+      "var30": 9.2,
+      "var90": 16.8,
+      "mm20": 1344.37,
+      "mm60": 1322.74,
+      "vol30": 26.7,
       "score": 5,
       "sinal": "LATERAL",
       "probs": [
@@ -752,7 +752,7 @@
         0.5
       ],
       "min": 1158.45,
-      "max": 1457.55,
+      "max": 1461.42,
       "hist": [
         1251.47,
         1268.96,
@@ -779,7 +779,7 @@
         1338.21,
         1338.21,
         1338.21,
-        1457.55
+        1461.42
       ],
       "dates": [
         "22/03/26",
@@ -817,15 +817,15 @@
       "grupo": "Grãos",
       "fonte_label": "CEPEA/IRGA",
       "fonte_desc": "CEPEA/IRGA · Arroz IRGA-RS",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
-      "last": 79.07,
-      "var7": 26.0,
-      "var30": 26.0,
-      "var90": 31.8,
+      "last": 79.12,
+      "var7": 26.1,
+      "var30": 26.1,
+      "var90": 31.9,
       "mm20": 63.57,
       "mm60": 62.94,
-      "vol30": 75.4,
+      "vol30": 75.6,
       "score": 5,
       "sinal": "ALTA",
       "probs": [
@@ -853,7 +853,7 @@
         1.5
       ],
       "min": 52.49,
-      "max": 79.07,
+      "max": 79.12,
       "hist": [
         60.0,
         61.83,
@@ -880,7 +880,7 @@
         62.75,
         62.75,
         62.75,
-        79.07
+        79.12
       ],
       "dates": [
         "22/03/26",
@@ -918,15 +918,15 @@
       "grupo": "Outros",
       "fonte_label": "CEPEA/ESALQ",
       "fonte_desc": "CEPEA/ESALQ · Café Arábica",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
-      "last": 1659.93,
-      "var7": -8.7,
-      "var30": -8.7,
-      "var90": -15.4,
-      "mm20": 1809.39,
-      "mm60": 1827.27,
-      "vol30": 25.1,
+      "last": 1635.57,
+      "var7": -10.0,
+      "var30": -10.0,
+      "var90": -16.7,
+      "mm20": 1808.18,
+      "mm60": 1826.86,
+      "vol30": 29.0,
       "score": -5,
       "sinal": "BAIXA",
       "probs": [
@@ -953,7 +953,7 @@
         2.5,
         1.5
       ],
-      "min": 1659.93,
+      "min": 1635.57,
       "max": 2376.04,
       "hist": [
         1962.67,
@@ -981,7 +981,7 @@
         1817.26,
         1817.26,
         1817.26,
-        1659.93
+        1635.57
       ],
       "dates": [
         "22/03/26",
@@ -1019,15 +1019,15 @@
       "grupo": "Outros",
       "fonte_label": "CEPEA/ESALQ",
       "fonte_desc": "CEPEA/ESALQ · Açúcar Cristal SP",
-      "data_ref": "07/09/2026",
+      "data_ref": "09/09/2026",
       "estimado": false,
-      "last": 116.79,
-      "var7": 21.6,
-      "var30": 21.6,
-      "var90": 15.3,
-      "mm20": 97.1,
-      "mm60": 99.64,
-      "vol30": 62.5,
+      "last": 117.34,
+      "var7": 22.2,
+      "var30": 22.2,
+      "var90": 15.8,
+      "mm20": 97.12,
+      "mm60": 99.65,
+      "vol30": 64.2,
       "score": 5,
       "sinal": "LATERAL",
       "probs": [
@@ -1082,7 +1082,7 @@
         96.06,
         96.06,
         96.06,
-        116.79
+        117.34
       ],
       "dates": [
         "22/03/26",
@@ -1120,16 +1120,16 @@
       "grupo": "Macro",
       "fonte_label": "BCB PTAX",
       "fonte_desc": "BCB PTAX · PTAX",
-      "data_ref": "04/09/2026",
+      "data_ref": "08/09/2026",
       "estimado": false,
-      "last": 5.13,
-      "var7": -0.6,
-      "var30": -1.5,
-      "var90": -0.8,
-      "mm20": 5.16,
+      "last": 5.09,
+      "var7": -0.2,
+      "var30": -1.7,
+      "var90": -1.4,
+      "mm20": 5.15,
       "mm60": 5.13,
-      "vol30": 6.2,
-      "score": -3,
+      "vol30": 6.6,
+      "score": -5,
       "sinal": "BAIXA",
       "probs": [
         70.0,
@@ -1183,7 +1183,7 @@
         5.16,
         5.2,
         5.13,
-        5.13
+        5.09
       ],
       "dates": [
         "22/03/26",
